@@ -7,40 +7,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Playlist {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tracks    PlaylistTrack[]
+// ─── Auth (NextAuth) ─────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
 }
 
-model PlaylistTrack {
-  id         String   @id @default(cuid())
-  playlistId String
-  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
-  trackId    String
-  title      String
-  artist     String
-  artwork    String?
-  source     String   // "youtube" or "itunes"
-  videoId    String?  // YouTube video ID
-  duration   Int?     // duration in seconds
-  addedAt    DateTime @default(now())
-
-  @@unique([playlistId, trackId])
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Favorite {
-  id        String   @id @default(cuid())
-  trackId   String
-  title     String
-  artist    String
-  artwork   String?
-  source    String
-  videoId   String?
-  duration  Int?
-  createdAt DateTime @default(now())
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
 
-  @@unique([trackId])
+  @@unique([identifier, token])
+}
+
+// ─── Users & Businesses ──────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // hashed via NextAuth
+  role          String    @default("user") // "user" | "admin"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  business      Business?
+  accounts      Account[]
+  sessions      Session[]
+  comparisonLogs ComparisonLog[]
+}
+
+model Business {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  country     String   // ISO 3166-1 alpha-2 code (e.g., "GH")
+  currency    String   // ISO 4217 (e.g., "GHS")
+  businessType String?  // "sole_proprietor" | "llc" | "corporation" | "cooperative"
+  registrationNumber String?
+  taxId       String?
+  verified    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── FX & Payments (Phase 1) ─────────────────────────────────────
+
+model FxRateSnapshot {
+  id        String   @id @default(cuid())
+  baseCurrency String   // e.g., "GHS"
+  quoteCurrency String  // e.g., "KES"
+  rate      Float    // 1 base = ? quote
+  source    String   // "central_bank" | "papse" | "ecb" | "manual"
+  fetchedAt DateTime @default(now())
+
+  @@unique([baseCurrency, quoteCurrency, source, fetchedAt])
+}
+
+model ComparisonLog {
+  id             String   @id @default(cuid())
+  userId         String?  // null for anonymous users
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  sendCurrency   String
+  receiveCurrency String
+  sendAmount     Float
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
 }

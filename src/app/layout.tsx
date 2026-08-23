@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { AppLayout } from "@/components/layout/app-layout";
-import { ViewProvider } from "@/store/view-context";
+import { ThemeProvider } from "next-themes";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -11,34 +9,26 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "FreeWave — Stream Free Music",
+  title: "TradeFlow — Compare African Cross-Border Payment Costs",
   description:
-    "Stream free music online. Hip Hop, Jazz, Classical, Electronic, R&B, Rock and more. Powered by YouTube & Apple Music.",
+    "See how much you save with PAPSS vs traditional methods. Instant comparison for 20+ African currencies. Built for AfCFTA traders.",
   keywords: [
-    "FreeWave",
-    "music streaming",
-    "free music",
-    "online music player",
-    "YouTube music",
-    "Apple Music",
+    "PAPSS",
+    "AfCFTA",
+    "cross-border payments",
+    "African trade",
+    "FX comparison",
+    "Afreximbank",
+    "send money Africa",
+    "business payments Africa",
   ],
-  icons: {
-    icon: "/favicon.svg",
-  },
-  manifest: "/manifest.json",
-  openGraph: {
-    title: "FreeWave — Stream Free Music",
-    description: "Discover and stream free music across every genre.",
-    type: "website",
-  },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#121212",
+  themeColor: "#059669",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  viewportFit: "cover",
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -48,11 +38,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} font-sans antialiased`}>
-        <ViewProvider>
-          <AppLayout>{children}</AppLayout>
-        </ViewProvider>
-        <Toaster />
+      <body className={`${geistSans.variable} font-sans antialiased bg-background text-foreground`}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
