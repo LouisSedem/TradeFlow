@@ -17,11 +17,15 @@ export interface PaymentMethodResult {
   speedRank: number; // 1 = fastest
   reliability: string;
   colorClass: string; // for UI theming
+  deliveryMethod: string; // delivery method category
 }
+
+export type DeliveryMethodFilter = "bank_deposit" | "mobile_money" | "cash_pickup" | "all";
 
 interface PaymentMethodConfig {
   name: string;
   type: "papss" | "bank" | "mto" | "fintech";
+  deliveryMethod: "bank_deposit" | "mobile_money" | "cash_pickup";
   fxMarkupPercent: number; // markup on mid-market rate
   flatFeePercent: number;  // percentage fee on amount
   flatFeeMin: number;     // minimum flat fee in send currency
@@ -58,6 +62,7 @@ const PAYMENT_METHODS: PaymentMethodConfig[] = [
   {
     name: "PAPSS",
     type: "papss",
+    deliveryMethod: "bank_deposit",
     fxMarkupPercent: 0.15,   // minimal FX markup
     flatFeePercent: 0.25,     // Afreximbank + bank processing
     flatFeeMin: 2,
@@ -70,6 +75,7 @@ const PAYMENT_METHODS: PaymentMethodConfig[] = [
   {
     name: "Bank Transfer (SWIFT)",
     type: "bank",
+    deliveryMethod: "bank_deposit",
     fxMarkupPercent: 2.0,
     flatFeePercent: 1.0,
     flatFeeMin: 10,
@@ -82,6 +88,7 @@ const PAYMENT_METHODS: PaymentMethodConfig[] = [
   {
     name: "Mobile Money",
     type: "fintech",
+    deliveryMethod: "mobile_money",
     fxMarkupPercent: 1.5,
     flatFeePercent: 1.5,
     flatFeeMin: 1,
@@ -94,6 +101,7 @@ const PAYMENT_METHODS: PaymentMethodConfig[] = [
   {
     name: "Western Union",
     type: "mto",
+    deliveryMethod: "cash_pickup",
     fxMarkupPercent: 4.0,
     flatFeePercent: 3.5,
     flatFeeMin: 5,
@@ -106,6 +114,7 @@ const PAYMENT_METHODS: PaymentMethodConfig[] = [
   {
     name: "MoneyGram",
     type: "mto",
+    deliveryMethod: "cash_pickup",
     fxMarkupPercent: 3.5,
     flatFeePercent: 3.0,
     flatFeeMin: 5,
@@ -118,27 +127,48 @@ const PAYMENT_METHODS: PaymentMethodConfig[] = [
 ];
 
 /**
- * Compare all payment methods for a given send/receive pair.
+ * Compare payment methods for a given send/receive pair.
  */
 export function compareMethods(
   sendCurrencyCode: string,
   receiveCurrencyCode: string,
-  sendAmount: number
+  sendAmount: number,
+  options?: {
+    deliveryMethod?: DeliveryMethodFilter;
+    liveRates?: Map<string, number>;
+  }
 ): PaymentMethodResult[] {
-  const midMarketRate = getCrossRate(sendCurrencyCode, receiveCurrencyCode);
+  const midMarketRate = getCrossRate(sendCurrencyCode, receiveCurrencyCode, options?.liveRates);
 
   if (midMarketRate === 0 || sendAmount <= 0) {
     return [];
   }
 
-  return PAYMENT_METHODS.map((method) => {
+  const deliveryFilter = options?.deliveryMethod || "all";
+
+  // Filter methods by delivery method
+  const filteredMethods = deliveryFilter === "all"
+    ? PAYMENT_METHODS
+    : PAYMENT_METHODS.filter((m) => m.deliveryMethod === deliveryFilter);
+
+  return filteredMethods.map((method) => {
+    // Volume discount for bank methods: reduce % fee for large amounts
+    let adjustedFlatFeePercent = method.flatFeePercent;
+    if (method.type === "bank" || method.type === "papss") {
+      if (sendAmount > 50000) {
+        adjustedFlatFeePercent *= 0.7; // 30% discount
+      } else if (sendAmount > 5000) {
+        adjustedFlatFeePercent *= 0.85; // 15% discount
+      }
+    }
+
     // Applied exchange rate (mid-market + markup)
     const adjustedRate = midMarketRate * (1 - method.fxMarkupPercent / 100);
 
-    // Flat fee in send currency
+    // Flat fee in send currency (with volume discount applied)
     const flatFee = Math.max(
       method.flatFeeMin,
-      Math.min(sendAmount * (method.flatFeePercent / 100), method.flatFeeMax)
+      Math.min(sendAmount * (adjustedFlatFeePercent / 100), method.flatFeeMax)
     );
 
     // Amount after fee (in send currency)
@@ -163,6 +193,7 @@ export function compareMethods(
       speedRank: method.speedRank,
       reliability: method.reliability,
       colorClass: method.colorClass,
+      deliveryMethod: method.deliveryMethod,
     };
   }).sort((a, b) => b.recipientGets - a.recipientGets); // Best value first
 }

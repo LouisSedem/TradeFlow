@@ -1,0 +1,539 @@
+   270→   270→    ('BACKGROUND', (0, 0), (-1, 0), TABLE_HEADER_COLOR),
+   271→   271→    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+   272→   272→    ('GRID', (0, 0), (-1, -1), 0.4, BORDER),
+   273→   273→    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+   274→   274→    ('LEFTPADDING', (0, 0), (-1, -1), 6),
+   275→   275→    ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+   276→   276→    ('TOPPADDING', (0, 0), (-1, -1), 5),
+   277→   277→    ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+   278→   278→    ('BACKGROUND', (0, 1), (-1, 1), TABLE_ROW_EVEN),
+   279→   279→    ('BACKGROUND', (0, 2), (-1, 2), TABLE_ROW_ODD),
+   280→   280→    ('BACKGROUND', (0, 3), (-1, 3), TABLE_ROW_EVEN),
+   281→   281→    ('BACKGROUND', (0, 4), (-1, 4), TABLE_ROW_ODD),
+   282→   282→]))
+   283→   283→story.append(stats_table)
+   284→   284→story.append(Spacer(1, 6))
+   285→   285→story.append(Paragraph('<i>Table 1: Key competitive landscape findings</i>', muted_style))
+   286→   286→story.append(Spacer(1, 18))
+   287→   287→
+   288→   288→# ══════════════════════════════════════════════════════════
+   289→   289→# CHAPTER 2: TradeFlow Phase 1 Current State
+   290→   290→# ══════════════════════════════════════════════════════════
+   291→   291→story.extend([
+   292→   292→    heading('<b>2. TradeFlow Phase 1: Current State</b>', h1_style, 0),
+   293→   293→    Spacer(1, 8),
+   294→   294→    heading('<b>2.1 What Was Built</b>', h2_style, 1),
+   295→   295→    Paragraph(
+   296→   296→        'TradeFlow Phase 1 delivered a single-page web application with an FX comparison calculator '
+   297→   297→        'as its core feature. The application is built on Next.js 16 with Prisma ORM, SQLite database, '
+   298→   298→        'Tailwind CSS 4, and shadcn/ui components. The landing page serves triple duty as marketing '
+   299→   299→        'collateral, educational content about PAPSS, and the functional calculator. The architecture is '
+   300→   300→        'designed to be extensible: the Prisma schema includes User, Business, FxRateSnapshot, and '
+   301→   301→        'ComparisonLog models, with NextAuth integration prepared but not yet activated. The codebase '
+   302→   302→        'follows zero-trust principles with input validation via Zod on all API endpoints.',
+   303→   303→        body_style
+   304→   304→    ),
+   305→   305→    heading('<b>2.2 Feature Inventory</b>', h2_style, 1),
+   306→   306→])
+   307→   307→
+   308→   308→features_data = [
+   309→   309→    [Paragraph('<b>Feature</b>', th_style), Paragraph('<b>Status</b>', th_style), Paragraph('<b>Notes</b>', th_style)],
+   310→   310→    [Paragraph('FX comparison calculator', td_left), Paragraph('Live', td_style), Paragraph('5 methods, 20+ currencies', td_left)],
+   311→   311→    [Paragraph('PAPSS routing display', td_left), Paragraph('Live', td_style), Paragraph('Always shown first when eligible', td_left)],
+   312→   312→    [Paragraph('Savings banner', td_left), Paragraph('Live', td_style), Paragraph('Shows amount and percent saved', td_left)],
+   313→   313→    [Paragraph('Quick-amount presets', td_left), Paragraph('Live', td_style), Paragraph('Currency-adaptive buttons', td_left)],
+   314→   314→    [Paragraph('Currency swap', td_left), Paragraph('Live', td_style), Paragraph('One-click direction reversal', td_left)],
+   315→   315→    [Paragraph('Dark mode', td_left), Paragraph('Live', td_style), Paragraph('System-aware via next-themes', td_left)],
+   316→   316→    [Paragraph('Responsive design', td_left), Paragraph('Live', td_style), Paragraph('Mobile-first, works on all screens', td_left)],
+   317→   317→    [Paragraph('Anonymous comparison logging', td_left), Paragraph('Live', td_style), Paragraph('IP + UA, no PII', td_left)],
+   318→   318→    [Paragraph('Auth system (NextAuth)', td_left), Paragraph('Schema only', td_style), Paragraph('DB models exist, UI not wired', td_left)],
+   319→   319→    [Paragraph('Business profiles', td_left), Paragraph('Schema only', td_style), Paragraph('Prisma model ready', td_left)],
+   320→   320→    [Paragraph('Live FX rates', td_left), Paragraph('Not implemented', td_style), Paragraph('Using hardcoded 2025 rates', td_left)],
+   321→   321→    [Paragraph('Rate history charts', td_left), Paragraph('Not implemented', td_style), Paragraph('No charting yet', td_left)],
+   322→   322→    [Paragraph('Rate alerts', td_left), Paragraph('Not implemented', td_style), Paragraph('No notification system', td_left)],
+   323→   323→]
+   324→   324→story.append(Spacer(1, 6))
+   325→   325→feat_table = Table(features_data, colWidths=[AVAIL_W*0.35, AVAIL_W*0.20, AVAIL_W*0.45], hAlign='CENTER')
+   326→   326→feat_cmds = [
+   327→   327→    ('BACKGROUND', (0, 0), (-1, 0), TABLE_HEADER_COLOR),
+   328→   328→    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+   329→   329→    ('GRID', (0, 0), (-1, -1), 0.4, BORDER),
+   330→   330→    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+   331→   331→    ('LEFTPADDING', (0, 0), (-1, -1), 6),
+   332→   332→    ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+   333→   333→    ('TOPPADDING', (0, 0), (-1, -1), 4),
+   334→   334→    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+   335→   335→]
+   336→   336→for i in range(1, len(features_data)):
+   337→   337→    bg = TABLE_ROW_ODD if i % 2 == 0 else TABLE_ROW_EVEN
+   338→   338→    feat_cmds.append(('BACKGROUND', (0, i), (-1, i), bg))
+   339→   339→feat_table.setStyle(TableStyle(feat_cmds))
+   340→   340→story.append(feat_table)
+   341→   341→story.append(Spacer(1, 6))
+   342→   342→story.append(Paragraph('<i>Table 2: TradeFlow Phase 1 feature inventory</i>', muted_style))
+   343→   343→story.append(Spacer(1, 12))
+   344→   344→
+   345→   345→story.extend([
+   346→   346→    heading('<b>2.3 Technical Stack Assessment</b>', h2_style, 1),
+   347→   347→    Paragraph(
+   348→   348→        'The technology choices for Phase 1 are sound and align with SaaS best practices. Next.js 16 provides '
+   349→   349→        'server-side rendering, API routes, and middleware support essential for compliance features in later '
+   350→   350→        'phases. Prisma ORM with SQLite is appropriate for early-stage development and can be migrated to '
+   351→   351→        'PostgreSQL or Turso for production without schema changes. The shadcn/ui component library '
+   352→   352→        'ensures accessibility and consistency. Tailwind CSS 4 enables rapid styling iteration. Zod validation '
+   353→   353→        'on all API endpoints enforces zero-trust data handling. The package includes React Query, Zustand, '
+   354→   354→        'and Recharts, indicating readiness for complex state management and data visualization in Phase 2.',
+   355→   355→        body_style
+   356→   356→    ),
+   357→   357→    Paragraph(
+   358→   358→        'However, the current deployment uses SQLite with a local database file, which is not suitable for '
+   359→   359→        'multi-instance production environments. Additionally, the FX rates are hardcoded approximations from '
+   360→   360→        '2025 rather than live market data, which significantly limits the tool\'s practical utility for real '
+   361→   361→        'decision-making. These are the two most critical gaps to address before the product can serve real users.',
+   362→   362→        body_style
+   363→   363→    ),
+   364→   364→])
+   365→   365→
+   366→   366→# ══════════════════════════════════════════════════════════
+   367→   367→# CHAPTER 3: Competitive Landscape
+   368→   368→# ══════════════════════════════════════════════════════════
+   369→   369→story.extend([
+   370→   370→    heading('<b>3. Competitive Landscape Analysis</b>', h1_style, 0),
+   371→   371→    Spacer(1, 8),
+   372→   372→    heading('<b>3.1 Competitor Classification</b>', h2_style, 1),
+   373→   373→    Paragraph(
+   374→   374→        'The 11 competitors analyzed fall into four distinct categories, each with different capabilities, '
+   375→   375→        'target audiences, and relevance to TradeFlow. Understanding these categories is essential for '
+   376→   376→        'positioning because TradeFlow does not compete directly with any single player; rather, it occupies '
+   377→   377→        'a meta-layer above them by comparing their payment rails side by side. The four categories are: '
+   378→   378→        'consumer remittance providers (Wise, SendWave, Remitly, Chipper Cash), B2B FX specialists (AZA '
+   379→   379→        'Finance), comparison engines (Monito), payment infrastructure platforms (Flutterwave, Paystack, '
+   380→   380→        'Africa\'s Talking), and niche players (Fonbnk, Pfegha).',
+   381→   381→        body_style
+   382→   382→    ),
+   383→   383→    heading('<b>3.2 Consumer Remittance Providers</b>', h2_style, 1),
+   384→   384→    heading('<b>3.2.1 Wise (formerly TransferWise)</b>', h3_style, 1),
+   385→   385→    Paragraph(
+   386→   386→        'Wise is the global benchmark for FX transparency and serves as the primary quality standard for '
+   387→   387→        'TradeFlow to measure against. With 12.8 million customers and operations in 80-plus countries, Wise '
+   388→   388→        'has demonstrated that transparency is a viable business model, not just an ethical choice. Their approach '
+   389→   389→        'of displaying the mid-market rate with a clear fee breakdown has set industry expectations. Lyssna UX '
+   390→   390→        'research from March 2026 shows that 70% of Wise users correctly identify the total cost of their '
+   391→   391→        'transfer, compared to significantly lower comprehension rates for competitors who embed markups in '
+   392→   392→        'their exchange rates. This is powerful evidence that transparency drives both user trust and retention.',
+   393→   393→        body_style
+   394→   394→    ),
+   395→   395→    Paragraph(
+   396→   396→        'For African corridors specifically, Wise supports only 6 African currencies and routes all '
+   397→   397→        'transfers through USD or EUR hubs, adding double conversion costs for intra-African pairs. They do '
+   398→   398→        'not support direct GHS-to-KES or NGN-to-TZS transfers. This is a structural limitation that PAPSS '
+   399→   399→        'was designed to solve, and it represents a significant opportunity for TradeFlow to highlight. Wise also '
+   400→   400→        'offers Wise Platform API for businesses, batch payments, and a multi-currency account, features that '
+   401→   401→        'TradeFlow should benchmark for Phase 3 and Phase 4 capabilities.',
+   402→   402→        body_style
+   403→   403→    ),
+   404→   404→    heading('<b>3.2.2 SendWave</b>', h3_style, 1),
+   405→   405→    Paragraph(
+   406→   406→        'SendWave operates a mobile-first remittance service focused on diaspora-to-Africa corridors. They '
+   407→   407→        'support 8 African countries with cash pickup and mobile money delivery. SendWave deliberately hides '
+   408→   408→        'FX markups within their exchange rates, providing a poor transparency benchmark. Their strength lies '
+   409→   409→        'in mobile UX: the app is designed for first-time smartphone users with large touch targets, minimal '
+   410→   410→        'text, and a streamlined 3-tap transfer flow. TradeFlow should study SendWave\'s mobile UX patterns '
+   411→   411→        'for its own mobile optimization, while actively contrasting SendWave\'s hidden costs with TradeFlow\'s '
+   412→   412→        'transparent comparison output. SendWave was acquired by Zepz (WorldRemit\'s parent) in 2022, giving it '
+   413→   413→        'financial backing but also corporate inertia that a lean startup can exploit.',
+   414→   414→        body_style
+   415→   415→    ),
+   416→   416→    heading('<b>3.2.3 Remitly</b>', h3_style, 1),
+   417→   417→    Paragraph(
+   418→   418→        'Remitly serves 15-plus African countries from diaspora sender markets. They offer economy and express '
+   419→   419→        'delivery tiers, with delivery speed being a primary differentiator. Like SendWave, Remitly shows the '
+   420→   420→        'transfer fee but hides the FX markup, resulting in partial transparency. Their mobile app is well-rated '
+   421→   421→        'and they offer a "price match guarantee" against competitors, which creates an interesting dynamic: '
+   422→   422→        'TradeFlow could potentially partner with Remitly for affiliate referrals while simultaneously using the '
+   423→   423→        'price match guarantee as a bargaining tool for users. Remitly went public on NASDAQ in 2021 and has '
+   424→   424→        'since expanded into bill payments and digital banking, showing the trajectory from remittance to '
+   425→   425→        'full financial services that TradeFlow\'s phased roadmap mirrors.',
+   426→   426→        body_style
+   427→   427→    ),
+   428→   428→    heading('<b>3.2.4 Chipper Cash</b>', h3_style, 1),
+   429→   429→    Paragraph(
+   430→   430→        'Chipper Cash is the most directly relevant competitor because it uniquely supports direct intra-Africa '
+   431→   431→        'FX pairs across 8 currencies without routing through USD. They use Ripple\'s blockchain rails for '
+   432→   432→        'settlement, which provides instant finality but introduces crypto regulatory complexity. Chipper Cash '
+   433→   433→        'has raised over $300 million in venture capital and claims 5 million users. However, their FX '
+   434→   434→        'transparency is rated as poor: they display neither the mid-market rate nor the markup percentage. '
+   435→   435→        'This is a critical weakness that TradeFlow can exploit. Chipper Cash also offers stock and crypto '
+   436→   436→        'trading features, suggesting they are evolving toward a super-app model rather than a focused FX tool. '
+   437→   437→        'TradeFlow should maintain focus on its comparison and transparency niche rather than trying to match '
+   438→   438→        'Chipper Cash\'s feature breadth.',
+   439→   439→        body_style
+   440→   440→    ),
+   441→   441→    heading('<b>3.3 B2B FX Specialist</b>', h2_style, 1),
+   442→   442→    heading('<b>3.3.1 AZA Finance</b>', h3_style, 1),
+   443→   443→    Paragraph(
+   444→   444→        'AZA Finance (formerly Binkabi) is the deepest African FX specialist, offering 200-plus currency pairs '
+   445→   445→        'with proprietary liquidity sourcing. They serve businesses rather than consumers, with a minimum '
+   446→   446→        'transfer size that excludes retail users. Their API-first approach is the benchmark for TradeFlow\'s '
+   447→   447→        'Phase 3 payment API. AZA does not publicly display rates or fees, requiring a login and KYC '
+   448→   448→        'completion before any pricing is revealed. This lack of transparency is common in B2B FX and creates '
+   449→   449→        'an opportunity for TradeFlow to serve as the transparent discovery layer that directs businesses to '
+   450→   450→        'providers like AZA for execution. AZA\'s direct settlement capability for intra-African pairs, without '
+   451→   451→        'USD intermediary routing, is exactly what PAPSS enables at scale, making them both a benchmark and a '
+   452→   452→        'potential integration partner for TradeFlow\'s later phases.',
+   453→   453→        body_style
+   454→   454→    ),
+   455→   455→    heading('<b>3.4 Comparison Engines</b>', h2_style, 1),
+   456→   456→    heading('<b>3.4.1 Monito</b>', h3_style, 1),
+   457→   457→    Paragraph(
+   458→   458→        'Monito is the closest existing product to what TradeFlow aspires to become. They compare 30-plus '
+   459→   459→        'remittance providers across thousands of corridors, ranking results by total recipient amount. Monito '
+   460→   460→        'earns revenue through affiliate commissions when users click through to complete a transfer with a '
+   461→   461→        'listed provider. They also offer a "Monito Score" that factors in regulatory licenses, customer reviews, '
+   462→   462→        'and service quality, going beyond pure price comparison. However, Monito has three critical gaps that '
+   463→   463→        'TradeFlow can fill. First, they compare remittance companies (Wise, Remitly, Western Union), not payment '
+   464→   464→        'rails (PAPSS, SWIFT, mobile money). Second, their intra-Africa coverage is weak, focusing primarily on '
+   465→   465→        'diaspora-to-home corridors. Third, they have zero PAPSS awareness, meaning they cannot surface the '
+   466→   466→        'cheapest option for African businesses trading within the continent. The affiliate monetization model is '
+   467→   467→        'directly applicable to TradeFlow\'s Phase 3 and Phase 4 strategy.',
+   468→   468→        body_style
+   469→   469→    ),
+   470→   470→    heading('<b>3.5 Payment Infrastructure Platforms</b>', h2_style, 1),
+   471→   471→    heading('<b>3.5.1 Flutterwave</b>', h3_style, 1),
+   472→   472→    Paragraph(
+   473→   473→        'Flutterwave is Africa\'s largest payment infrastructure company, processing payments across 34 African '
+   474→   474→        'countries and 150-plus currencies. Acquired by Stripe, they provide payment gateways, merchant '
+   475→   475→        'tools, and cross-border transfer capabilities. However, Flutterwave is not a consumer-facing FX '
+   476→   476→        'comparison tool. Their cross-border product routes most transfers through USD rather than direct '
+   477→   477→        'currency pairs, adding cost. Flutterwave\'s Barter product offers virtual dollar cards for African '
+   478→   478→        'businesses, addressing a different pain point than TradeFlow. The key takeaway from Flutterwave is their '
+   479→   479→        'API-first architecture and their success in building developer-friendly payment tools, which should '
+   480→   480→        'inform TradeFlow\'s Phase 3 API design. Flutterwave also demonstrates that regulatory compliance at '
+   481→   481→        'scale across 34 African jurisdictions is achievable, providing a roadmap for TradeFlow\'s expansion.',
+   482→   482→        body_style
+   483→   483→    ),
+   484→   484→    heading('<b>3.5.2 Paystack</b>', h3_style, 1),
+   485→   485→    Paragraph(
+   486→   486→        'Paystack (also Stripe-acquired) is a payment gateway focused on domestic payment collection in Nigeria, '
+   487→   487→        'Ghana, Kenya, South Africa, and Egypt. They are not a cross-border FX product and do not offer currency '
+   488→   488→        'conversion or international transfer comparison. Paystack\'s relevance to TradeFlow is primarily as a '
+   489→   489→        'potential Phase 3 integration partner: businesses that use TradeFlow for FX comparison could execute '
+   490→   490→        'payments through Paystack\'s infrastructure. Their checkout experience and merchant dashboard are '
+   491→   491→        'industry-leading and should inform TradeFlow\'s invoice payment flow in Phase 2. The Stripe acquisition '
+   492→   492→        'gives both Paystack and Flutterwave global credibility and access to advanced fraud detection systems '
+   493→   493→        'that TradeFlow will need to build or partner for in later phases.',
+   494→   494→        body_style
+   495→   495→    ),
+   496→   496→    heading('<b>3.5.3 Africa\'s Talking</b>', h3_style, 1),
+   497→   497→    Paragraph(
+   498→   498→        'Africa\'s Talking provides communication and payment APIs including SMS, USSD, voice, and mobile money '
+   499→   499→        'integration across 10-plus African countries. They are not a cross-border FX product but offer the '
+   500→   500→        'deepest mobile money API coverage on the continent. For TradeFlow, Africa\'s Talking is relevant in two '
+   501→   501→        'ways. First, their mobile money integration could power the "Mobile Money" payment method comparison '
+   502→   502→        'with real fee data rather than estimates. Second, their SMS and USSD APIs could enable rate alert '
+   503→   503→        'notifications via text message, which is critical for reaching users in markets where smartphone '
+   504→   504→        'penetration is lower. Africa\'s Talking\'s developer documentation and SDK quality are benchmarks for '
+   505→   505→        'TradeFlow\'s own API documentation.',
+   506→   506→        body_style
+   507→   507→    ),
+   508→   508→    heading('<b>3.6 Niche and Emerging Players</b>', h2_style, 1),
+   509→   509→    Paragraph(
+   510→   510→        'Fonbnk converts prepaid mobile airtime to USDC stablecoin and back, targeting unbanked populations. '
+   511→   511→        'While innovative, their market presence is minimal and their stablecoin-based approach introduces '
+   512→   512→        'regulatory uncertainty. However, Fonbnk represents the stablecoin rail that TradeFlow should consider '
+   513→   513→        'adding as a sixth comparison method in future phases, particularly as Nigerian and Kenyan regulators '
+   514→   514→        'develop clearer stablecoin frameworks. Pfegha is a Cameroon-only mobile wallet with negligible cross-border '
+   515→   515→        'capability and is not a competitive threat. It is included in this audit only for completeness of the '
+   516→   516→        'African payment landscape mapping.',
+   517→   517→        body_style
+   518→   518→    ),
+   519→   519→])
+   520→   520→
+   521→   521→# ══════════════════════════════════════════════════════════
+   522→   522→# CHAPTER 4: Feature-by-Feature Comparison
+   523→   523→# ══════════════════════════════════════════════════════════
+   524→   524→story.extend([
+   525→   525→    heading('<b>4. Feature-by-Feature Comparison</b>', h1_style, 0),
+   526→   526→    Spacer(1, 8),
+   527→   527→    heading('<b>4.1 Scoring Methodology</b>', h2_style, 1),
+   528→   528→    Paragraph(
+   529→   529→        'Each competitor was scored on six dimensions relevant to TradeFlow\'s positioning: African Focus (depth '
+   530→   530→        'of African currency and corridor coverage), FX Transparency (how clearly total costs are communicated), '
+   531→   531→        'PAPSS Awareness (explicit mention or integration of PAPSS infrastructure), Comparison Capability '
+   532→   532→        '(ability to compare multiple providers or methods side by side), Mobile UX (quality of mobile '
+   533→   533→        'experience), and API and Developer Tools (availability and quality of programmatic access). Scores '
+   534→   534→        'range from 0 to 5, with 5 indicating best-in-class. The overall relevance score weights dimensions '
+   535→   535→        'based on their importance to TradeFlow\'s specific niche.',
+   536→   536→        body_style
+   537→   537→    ),
+   538→   538→])
+   539→   539→
+   540→   540→# Scoring matrix
+   541→   541→score_headers = ['Competitor', 'Africa', 'FX Trans.', 'PAPSS', 'Compare', 'Mobile', 'API/Dev', 'Overall']
+   542→   542→score_rows = [
+   543→   543→    ['Monito', '3/5', '5/5', '0/5', '5/5', '3/5', '1/5', 'HIGH'],
+   544→   544→    ['Wise', '3/5', '5/5', '0/5', '2/5', '4/5', '4/5', 'HIGH'],
+   545→   545→    ['AZA Finance', '5/5', '2/5', '0/5', '1/5', '1/5', '4/5', 'MEDIUM'],
+   546→   546→    ['Chipper Cash', '5/5', '1/5', '0/5', '1/5', '4/5', '1/5', 'MEDIUM'],
+   547→   547→    ['Flutterwave', '5/5', '2/5', '0/5', '1/5', '3/5', '4/5', 'MEDIUM'],
+   548→   548→    ['Remitly', '4/5', '2/5', '0/5', '1/5', '4/5', '1/5', 'LOW-MED'],
+   549→   549→    ['SendWave', '4/5', '1/5', '0/5', '1/5', '5/5', '1/5', 'LOW'],
+   550→   550→    ['Fonbnk', '3/5', '1/5', '0/5', '1/5', '2/5', '1/5', 'LOW'],
+   551→   551→    ['Africa\'s Talking', '4/5', 'N/A', '0/5', 'N/A', '1/5', '5/5', 'LOW'],
+   552→   552→    ['Paystack', '3/5', 'N/A', '0/5', 'N/A', '1/5', '4/5', 'LOW'],
+   553→   553→    ['Pfegha', '1/5', '1/5', '0/5', '1/5', '1/5', '1/5', 'NEGLIGIBLE'],
+   554→   554→]
+   555→   555→score_ratios = [0.18, 0.10, 0.10, 0.10, 0.10, 0.10, 0.14, 0.18]
+   556→   556→score_table_data = [[Paragraph('<b>%s</b>' % h, th_style) for h in score_headers]]
+   557→   557→for row in score_rows:
+   558→   558→    score_table_data.append([Paragraph(c, td_left if i == 0 else (td_bold if i == len(row)-1 else td_style)) for i, c in enumerate(row)])
+   559→   559→score_t = Table(score_table_data, colWidths=[r*AVAIL_W for r in score_ratios], hAlign='CENTER')
+   560→   560→score_cmds = [
+   561→   561→    ('BACKGROUND', (0, 0), (-1, 0), TABLE_HEADER_COLOR),
+   562→   562→    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+   563→   563→    ('GRID', (0, 0), (-1, -1), 0.4, BORDER),
+   564→   564→    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+   565→   565→    ('LEFTPADDING', (0, 0), (-1, -1), 4),
+   566→   566→    ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+   567→   567→    ('TOPPADDING', (0, 0), (-1, -1), 3),
+   568→   568→    ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+   569→   569→]
+   570→   570→for i in range(1, len(score_table_data)):
+   571→   571→    bg = TABLE_ROW_ODD if i % 2 == 0 else TABLE_ROW_EVEN
+   572→   572→    score_cmds.append(('BACKGROUND', (0, i), (-1, i), bg))
+   573→   573→score_t.setStyle(TableStyle(score_cmds))
+   574→   574→story.append(Spacer(1, 12))
+   575→   575→story.append(score_t)
+   576→   576→story.append(Spacer(1, 6))
+   577→   577→story.append(Paragraph('<i>Table 3: Competitor scoring matrix (1-5 scale, overall relevance weighted)</i>', muted_style))
+   578→   578→story.append(Spacer(1, 18))
+   579→   579→
+   580→   580→# ══════════════════════════════════════════════════════════
+   581→   581→# CHAPTER 5: Gap Analysis
+   582→   582→# ══════════════════════════════════════════════════════════
+   583→   583→story.extend([
+   584→   584→    heading('<b>5. Gap Analysis: TradeFlow vs. Benchmarks</b>', h1_style, 0),
+   585→   585→    Spacer(1, 8),
+   586→   586→    heading('<b>5.1 Critical Gaps (Must Fix Before Phase 2)</b>', h2_style, 1),
+   587→   587→    Paragraph(
+   588→   588→        'Three gaps are classified as critical because they directly undermine the product\'s core value '
+   589→   589→        'proposition of helping users make informed payment decisions. Without addressing these, TradeFlow\'s '
+   590→   590→        'comparisons are theoretically interesting but practically unreliable for real financial decisions.',
+   591→   591→        body_style
+   592→   592→    ),
+   593→   593→    Paragraph(
+   594→   594→        '<b>Live FX Rates.</b> The current implementation uses hardcoded exchange rate approximations from '
+   595→   595→        '2025. In a market where African currencies fluctuate significantly (the Nigerian Naira lost over 60% '
+   596→   596→        'of its value against the USD in 2023-2024), stale rates make the entire comparison unreliable. Wise '
+   597→   597→        'updates rates every 60 seconds. Monito queries provider APIs in real-time. TradeFlow should integrate '
+   598→   598→        'central bank APIs (Bank of Ghana, Central Bank of Kenya, CBN) and fallback to aggregated feeds like '
+   599→   599→        'ExchangeRate-API or Open Exchange Rates. The FxRateSnapshot model in the Prisma schema is already '
+   600→   600→        'designed to store rate history, indicating this was always planned.',
+   601→   601→        body_style
+   602→   602→    ),
+   603→   603→    Paragraph(
+   604→   604→        '<b>Production Database.</b> SQLite with a local file is not viable for a multi-user production system. '
+   605→   605→        'The comparison logging feature already writes to the database, and any concurrent access from multiple '
+   606→   606→        'server instances (Vercel, Docker) will cause locking issues. Migration to PostgreSQL (Supabase, Neon) '
+   607→   607→        'or Turso (libSQL) should be completed before activating user authentication. The Prisma schema requires '
+   608→   608→        'minimal changes for this migration, making it a low-effort, high-impact fix.',
+   609→   609→        body_style
+   610→   610→    ),
+   611→   611→    Paragraph(
+   612→   612→        '<b>User Authentication.</b> While the Prisma schema includes User, Account, and Session models for '
+   613→   613→        'NextAuth, and the package.json includes next-auth as a dependency, there is no sign-in UI, no auth '
+   614→   614→        'middleware, and no protected routes. Phase 2\'s invoicing feature requires authenticated users to create '
+   615→   615→        'and manage invoices. Without auth, the platform cannot persist user preferences, save comparison '
+   616→   616→        'history, or send rate alerts. This is the foundational enabler for all subsequent phases.',
+   617→   617→        body_style
+   618→   618→    ),
+   619→   619→    heading('<b>5.2 Important Gaps (Should Address in Phase 2)</b>', h2_style, 1),
+   620→   620→    Paragraph(
+   621→   621→        '<b>Historical Rate Charts.</b> Both Wise and Monito offer rate history visualization. Wise shows '
+   622→   622→        '30-day rate trends alongside their transfer calculator. This feature builds trust by demonstrating '
+   623→   623→        'rate volatility and helping users time their transfers. TradeFlow has Recharts in the dependency list, '
+   624→   624→        'indicating charting capability was anticipated. The FxRateSnapshot model can store historical rates, '
+   625→   625→        'enabling rate trend charts once live data is flowing. This should be implemented as part of the Phase 2 '
+   626→   626→        'calculator enhancement, not deferred to a later phase.',
+   627→   627→        body_style
+   628→   628→    ),
+   629→   629→    Paragraph(
+   630→   630→        '<b>Delivery Method Filters.</b> Monito allows users to filter by delivery method (cash pickup, bank '
+   631→   631→        'deposit, mobile money, home delivery). For African corridors, delivery method is often more important '
+   632→   632→        'than price: a supplier in rural Kenya may only have access to mobile money, making bank transfer results '
+   633→   633→        'irrelevant. Adding delivery method filters would significantly improve the practical utility of TradeFlow\'s '
+   634→   634→        'comparison results for real African business scenarios. This is a medium-effort enhancement with high '
+   635→   635→        'user impact.',
+   636→   636→        body_style
+   637→   637→    ),
+   638→   638→    Paragraph(
+   639→   639→        '<b>Amount-Specific Fee Structures.</b> The current FX engine applies percentage-based fee calculations. '
+   640→   640→        'In reality, many providers use tiered fee structures (for example, Western Union charges different '
+   641→   641→        'percentage fees for amounts below and above $500). The flat fee minimum and maximum caps in the current '
+   642→   642→        'engine are a reasonable approximation, but they should be replaced with corridor-specific fee tables '
+   643→   643→        'that reflect actual provider pricing. This data can be sourced from provider websites, the World Bank\'s '
+   644→   644→        'Remittance Prices Worldwide database, and user-submitted reports.',
+   645→   645→        body_style
+   646→   646→    ),
+   647→   647→    heading('<b>5.3 Nice-to-Have Gaps (Phase 3+)</b>', h2_style, 1),
+   648→   648→    Paragraph(
+   649→   649→        '<b>Rate Alerts.</b> Monito offers email alerts when rates for a specific corridor reach a user-defined '
+   650→   650→        'threshold. For African businesses that make regular cross-border payments, knowing when the GHS-to-KES '
+   651→   651→        'rate improves by 2% could save thousands of dollars annually. This requires the notification infrastructure '
+   652→   652→        '(email via Resend or SendGrid, SMS via Africa\'s Talking) and a scheduled job system (cron or queue) to '
+   653→   653→        'monitor rates and trigger alerts. This is a powerful retention feature that should be planned for Phase 3, '
+   654→   654→        'once authenticated users and live rates are in place.',
+   655→   655→        body_style
+   656→   656→    ),
+   657→   657→    Paragraph(
+   658→   658→        '<b>Mobile App / PWA.</b> SendWave demonstrates that mobile-first design is critical for African markets. '
+   659→   659→        'While TradeFlow\'s responsive web design works on mobile browsers, a Progressive Web App with offline '
+   660→   660→        'rate caching, push notifications for rate alerts, and home screen installation would significantly improve '
+   661→   661→        'the mobile experience. Next.js supports PWA configuration, and the existing Service Worker architecture '
+   662→   662→        'from the FreeWave project provides reusable patterns for implementing this.',
+   663→   663→        body_style
+   664→   664→    ),
+   665→   665→    Paragraph(
+   666→   666→        '<b>Stablecoin Rail Comparison.</b> Fonbnk and Stellar-based solutions represent an emerging payment '
+   667→   667→        'rail that could complement or undercut traditional methods. As Nigerian and Kenyan regulators develop '
+   668→   668→        'stablecoin frameworks, adding USDC/cUSDT as a sixth comparison method would position TradeFlow as a '
+   669→   669→        'forward-looking platform. This requires careful regulatory monitoring and should only be implemented '
+   670→   670→        'when clarity exists in key markets. The phased architecture already supports adding new payment methods '
+   671→   671→        'to the engine without structural changes.',
+   672→   672→        body_style
+   673→   673→    ),
+   674→   674→])
+   675→   675→
+   676→   676→# ══════════════════════════════════════════════════════════
+   677→   677→# CHAPTER 6: TradeFlow's Unique Positioning
+   678→   678→# ══════════════════════════════════════════════════════════
+   679→   679→story.extend([
+   680→   680→    heading('<b>6. TradeFlow Unique Positioning</b>', h1_style, 0),
+   681→   681→    Spacer(1, 8),
+   682→   682→    heading('<b>6.1 The White Space</b>', h2_style, 1),
+   683→   683→    Paragraph(
+   684→   684→        'TradeFlow has identified and occupied a genuinely uncontested market position. The white space can be '
+   685→   685→        'defined along three dimensions that no existing competitor addresses simultaneously. First, PAPSS-aware '
+   686→   686→        'comparison: no tool compares PAPSS routing against traditional methods for African corridors. Second, '
+   687→   687→        'multi-rail comparison: existing tools compare providers (Wise versus Remitly), not infrastructure (PAPSS '
+   688→   688→        'versus SWIFT versus mobile money versus stablecoin). Third, intra-Africa focus: Monito and Wise focus on '
+   689→   689→        'diaspora-to-home corridors, while the $205 billion in annual African cross-border payments between '
+   690→   690→        'African countries is largely unserved by comparison tools.',
+   691→   691→        body_style
+   692→   692→    ),
+   693→   693→    Paragraph(
+   694→   694→        'This triple white space is not accidental. It exists because PAPSS is still in its early adoption phase, '
+   695→   695→        'with CBN mandating adoption in Nigeria but regulatory barriers slowing uptake in other jurisdictions. '
+   696→   696→        'The opportunity is time-sensitive: as PAPSS adoption accelerates (driven by AfCFTA trade growth and '
+   697→   697→        'central bank mandates), competitors will eventually recognize this space. TradeFlow\'s first-mover '
+   698→   698→        'advantage depends on establishing brand recognition and data density before well-funded entrants arrive.',
+   699→   699→        body_style
+   700→   700→    ),
+   701→   701→    heading('<b>6.2 Positioning Statement</b>', h2_style, 1),
+   702→   702→    Paragraph(
+   703→   703→        'Based on the competitive analysis, TradeFlow\'s positioning should be refined as follows: "TradeFlow is '
+   704→   704→        'the first and only comparison engine that shows African businesses how much they save by using PAPSS '
+   705→   705→        'instead of traditional cross-border payment methods. We compare payment rails, not just providers, '
+   706→   706→        'so you see the true cost of every option including SWIFT, mobile money, MTOs, and fintech platforms." '
+   707→   707→        'This positioning is defensible because it requires deep knowledge of African payment infrastructure, '
+   708→   708→        'corridor-specific fee structures, and PAPSS settlement mechanics that generalist tools like Monito lack.',
+   709→   709→        body_style
+   710→   710→    ),
+   711→   711→])
+   712→   712→
+   713→   713→# ══════════════════════════════════════════════════════════
+   714→   714→# CHAPTER 7: Strategic Recommendations
+   715→   715→# ══════════════════════════════════════════════════════════
+   716→   716→story.extend([
+   717→   717→    heading('<b>7. Strategic Recommendations for Phase 2+</b>', h1_style, 0),
+   718→   718→    Spacer(1, 8),
+   719→   719→    heading('<b>7.1 Phase 2 Priorities (Invoicing and Receivables)</b>', h2_style, 1),
+   720→   720→    Paragraph(
+   721→   721→        'Phase 2 should deliver three outcomes beyond the core invoicing feature. First, activate user '
+   722→   722→        'authentication using the existing NextAuth schema with email and Google OAuth providers. This is '
+   723→   723→        'non-negotiable because invoices require an authenticated creator. Second, migrate to a production database '
+   724→   724→        '(recommended: Turso for cost efficiency or Supabase for the free tier and built-in auth). Third, '
+   725→   725→        'integrate live FX rates from central bank APIs with a 60-second cache, displaying the rate timestamp '
+   726→   726→        'and source on every comparison result. These three infrastructure upgrades are prerequisites for the '
+   727→   727→        'invoicing feature to function in a real-world context.',
+   728→   728→        body_style
+   729→   729→    ),
+   730→   730→    Paragraph(
+   731→   731→        'For the invoicing feature itself, the competitive audit reveals that no competitor offers invoice '
+   732→   732→        'functionality with built-in PAPSS cost optimization. This means TradeFlow can define the category rather '
+   733→   733→        'than compete within it. The invoice should include an "estimated PAPSS savings" line item that shows the '
+   734→   734→        'receiver how much they would save if the invoice were paid via PAPSS versus traditional methods. This '
+   735→   735→        'turns every invoice into a PAPSS advocacy tool and differentiates TradeFlow invoices from generic '
+   736→   736→        'invoicing products like Wave, Zoho, or Invoice Ninja.',
+   737→   737→        body_style
+   738→   738→    ),
+   739→   739→    heading('<b>7.2 Phase 3 Priorities (Payment Facilitation API)</b>', h2_style, 1),
+   740→   740→    Paragraph(
+   741→   741→        'Phase 3 should implement the affiliate and partnership model that Monito has validated. Rather than '
+   742→   742→        'becoming a payment processor (which requires expensive licensing), TradeFlow should serve as the '
+   743→   743→        'transparent discovery layer that connects businesses to existing payment providers. The API should '
+   744→   744→        'return structured comparison results that developers can embed in their own applications, with affiliate '
+   745→   745→        'referral links for each payment method. Flutterwave\'s Barter API and Africa\'s Talking\'s payment API '
+   746→   746→        'are potential integration partners. The affiliate revenue model means TradeFlow earns when users act on '
+   747→   747→        'its recommendations, creating a sustainable business without needing to hold or transfer funds.',
+   748→   748→        body_style
+   749→   749→    ),
+   750→   750→    heading('<b>7.3 Phase 4 Priorities (Trade Marketplace)</b>', h2_style, 1),
+   751→   751→    Paragraph(
+   752→   752→        'The trade marketplace should be built on the data density that Phases 1-3 generate. By Phase 4, '
+   753→   753→        'TradeFlow will have data on thousands of comparison queries, revealing which corridors are most in '
+   754→   754→        'demand, which payment methods are most popular, and what the typical transaction sizes are. This data '
+   755→   755→        'should inform marketplace features: curated supplier directories for high-demand corridors, verified '
+   756→   756→        'business profiles with PAPSS capability badges, and corridor-specific trade intelligence reports. The '
+   757→   757→        'marketplace is the long-term monetization engine, but it depends entirely on the trust and data built '
+   758→   758→        'in earlier phases. Attempting to launch a marketplace without the FX comparison and invoicing foundation '
+   759→   759→        'would result in an empty marketplace with no network effects.',
+   760→   760→        body_style
+   761→   761→    ),
+   762→   762→    heading('<b>7.4 Cross-Phase Requirements</b>', h2_style, 1),
+   763→   763→    Paragraph(
+   764→   764→        'Several capabilities span all phases and should be treated as continuous investments rather than phase-gated '
+   765→   765→        'features. Compliance infrastructure (KYC/AML verification, data residency, regulatory monitoring) must be '
+   766→   766→        'built incrementally from Phase 2 onward because regulatory requirements will expand as the product moves '
+   767→   767→        'from anonymous comparison to authenticated invoicing to payment facilitation. Performance monitoring and '
+   768→   768→        'analytics should track comparison volume, corridor demand, conversion to paid actions, and user retention. '
+   769→   769→        'SEO and content marketing should target corridor-specific keywords (for example, "GHS to KES transfer cost" '
+   770→   770→        'or "PAPSS payment Nigeria") to capture organic search demand that currently has no authoritative answer.',
+   771→   771→        body_style
+   772→   772→    ),
+   773→   773→])
+   774→   774→
+   775→   775→# ══════════════════════════════════════════════════════════
+   776→   776→# CHAPTER 8: Risk Assessment
+   777→   777→# ══════════════════════════════════════════════════════════
+   778→   778→story.extend([
+   779→   779→    heading('<b>8. Risk Assessment</b>', h1_style, 0),
+   780→   780→    Spacer(1, 8),
+   781→   781→    Paragraph(
+   782→   782→        'The competitive audit also surfaces several risks that could undermine TradeFlow\'s positioning if '
+   783→   783→        'not actively managed. The most significant risk is that a well-funded competitor (Flutterwave, Stripe, '
+   784→   784→        'or a new entrant) recognizes the PAPSS comparison opportunity and builds a competing product with '
+   785→   785→        'superior resources. The mitigation is speed: TradeFlow must establish brand recognition and user trust '
+   786→   786→        'before this happens. A second risk is PAPSS adoption stalling due to regulatory fragmentation across '
+   787→   787→        'African central banks. If PAPSS fails to gain traction, the core value proposition weakens. The '
+   788→   788→        'mitigation is to frame TradeFlow as an "African cross-border payment cost comparison" tool that '
+   789→   789→        'happens to include PAPSS as one rail among many, rather than a "PAPSS-only" tool.',
+   790→   790→        body_style
+   791→   791→    ),
+   792→   792→    Paragraph(
+   793→   793→        'A third risk is data accuracy: if TradeFlow\'s fee estimates are significantly different from what users '
+   794→   794→        'actually pay, trust will erode quickly. The mitigation is to implement user-reported actual costs (a '
+   795→   795→        '"Did you save as much as we predicted?" feedback loop) and continuously calibrate the engine against '
+   796→   796→        'real-world data. A fourth risk is regulatory risk around providing financial information without a '
+   797→   797→        'license. TradeFlow does not execute payments and therefore may not require a money transmitter license, '
+   798→   798→        'but legal review is needed in each target market. The compliance-by-design principle from the original '
+   799→   799→        'project brief should guide all architectural decisions to minimize regulatory exposure.',
+   800→   800→        body_style
+   801→   801→    ),
+   802→   802→])
+   803→   803→
+   804→   804→# Build
+   805→   805→doc.pageTemplates = [template]
+   806→   806→doc.multiBuild(story)
+   807→   807→print(f'Body PDF generated: {OUTPUT}')
+   808→   808→

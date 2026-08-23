@@ -75,11 +75,23 @@ export function getCurrency(code: string): Currency | undefined {
 }
 
 /** Cross rate: how many quoteCurrency units per 1 baseCurrency unit */
-export function getCrossRate(baseCode: string, quoteCode: string): number {
+export function getCrossRate(baseCode: string, quoteCode: string, liveRates?: Map<string, number>): number {
+  if (baseCode === quoteCode) return 1;
+
+  // Use live rates if provided
+  if (liveRates) {
+    const baseToUsd = liveRates.get(baseCode);
+    const quoteToUsd = liveRates.get(quoteCode);
+    if (baseToUsd && quoteToUsd && quoteToUsd > 0) {
+      return baseToUsd / quoteToUsd;
+    }
+  }
+
+  // Fallback to hardcoded rates
   const base = AFRICAN_CURRENCIES.find((c) => c.code === baseCode);
   const quote = AFRICAN_CURRENCIES.find((c) => c.code === quoteCode);
   if (!base || !quote) return 0;
-  if (baseCode === quoteCode) return 1;
   // base → USD → quote
   return base.rateToUSD / quote.rateToUSD;
 }
+

@@ -22,6 +22,7 @@ export const metadata: Metadata = {
     "send money Africa",
     "business payments Africa",
   ],
+  manifest: "/manifest.json",
 };
 
 export const viewport: Viewport = {
@@ -38,6 +39,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#059669" />
+      </head>
       <body className={`${geistSans.variable} font-sans antialiased bg-background text-foreground`}>
         <ThemeProvider
           attribute="class"

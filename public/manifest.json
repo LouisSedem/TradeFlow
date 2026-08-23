@@ -1,0 +1,19 @@
+{
+  "name": "TradeFlow",
+  "short_name": "TradeFlow",
+  "description": "Compare African cross-border payment costs — PAPSS vs banks, MTOs, and mobile money",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["finance", "business"]
+}

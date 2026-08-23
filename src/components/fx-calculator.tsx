@@ -22,7 +22,13 @@ import {
   Zap,
   Shield,
   BarChart3,
+  Building2,
+  Smartphone,
+  Wallet,
+  Radio,
 } from "lucide-react";
+import { RateChart } from "./rate-chart";
+import { RateAlertDialog } from "./rate-alert-dialog";
 
 interface CurrencyOption {
   code: string;
@@ -59,6 +65,8 @@ interface CompareResponse {
   midMarketRate: number;
   methods: MethodResult[];
   savings: Savings | null;
+  rateSource: string;
+  rateFetchedAt: string | null;
 }
 
 // Popular send amounts
@@ -79,6 +87,15 @@ const BADGE_STYLES: Record<string, string> = {
   orange: "bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300 border-orange-200 dark:border-orange-800",
 };
 
+type DeliveryFilter = "all" | "bank_deposit" | "mobile_money" | "cash_pickup";
+
+const DELIVERY_OPTIONS: { value: DeliveryFilter; label: string; icon: React.ReactNode }[] = [
+  { value: "all", label: "All Methods", icon: <BarChart3 className="w-3.5 h-3.5" /> },
+  { value: "bank_deposit", label: "Bank Deposit", icon: <Building2 className="w-3.5 h-3.5" /> },
+  { value: "mobile_money", label: "Mobile Money", icon: <Smartphone className="w-3.5 h-3.5" /> },
+  { value: "cash_pickup", label: "Cash Pickup", icon: <Wallet className="w-3.5 h-3.5" /> },
+];
+
 export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
   const [sendCurrency, setSendCurrency] = useState("GHS");
   const [receiveCurrency, setReceiveCurrency] = useState("KES");
@@ -86,6 +103,8 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
   const [result, setResult] = useState<CompareResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deliveryFilter, setDeliveryFilter] = useState<DeliveryFilter>("all");
+  const [alertOpen, setAlertOpen] = useState(false);
 
   const handleSwap = useCallback(() => {
     setSendCurrency(receiveCurrency);
@@ -115,6 +134,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
           sendCurrency,
           receiveCurrency,
           sendAmount: numAmount,
+          deliveryMethod: deliveryFilter,
         }),
       });
       if (!res.ok) {
@@ -128,10 +148,18 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
     } finally {
       setLoading(false);
     }
-  }, [amount, sendCurrency, receiveCurrency]);
+  }, [amount, sendCurrency, receiveCurrency, deliveryFilter]);
 
   const sendCur = useMemo(() => currencies.find((c) => c.code === sendCurrency), [currencies, sendCurrency]);
   const recvCur = useMemo(() => currencies.find((c) => c.code === receiveCurrency), [currencies, receiveCurrency]);
+
+  const isLive = result?.rateSource?.includes("live") ?? false;
+
+  const formatTime = (isoStr: string | null) => {
+    if (!isoStr) return "N/A";
+    const d = new Date(isoStr);
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
 
   return (
     <section className="w-full max-w-2xl mx-auto" aria-label="FX Comparison Calculator">
@@ -171,7 +199,6 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
             {/* Quick amount buttons */}
             <div className="flex flex-wrap gap-2">
               {QUICK_AMOUNTS.filter((a) => {
-                // Show amounts appropriate for the currency
                 if (sendCurrency === "GHS") return a <= 100000;
                 if (sendCurrency === "NGN") return a >= 5000;
                 if (sendCurrency === "ZAR") return a <= 100000;
@@ -231,6 +258,27 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
             </Select>
           </div>
 
+          {/* Delivery method filter pills */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-muted-foreground">Delivery method</label>
+            <div className="flex flex-wrap gap-2">
+              {DELIVERY_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => { setDeliveryFilter(opt.value); setResult(null); }}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors cursor-pointer ${
+                    deliveryFilter === opt.value
+                      ? "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-700"
+                      : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
+                  }`}
+                >
+                  {opt.icon}
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Compare button */}
           <Button
             onClick={handleCompare}
@@ -287,6 +335,11 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
           <div className="space-y-3">
             <h3 className="text-sm font-medium text-muted-foreground px-1">
               Comparison ({sendCur?.symbol}{parseFloat(amount).toLocaleString()})
+              {deliveryFilter !== "all" && (
+                <span className="ml-2 text-emerald-600 dark:text-emerald-400">
+                  · {DELIVERY_OPTIONS.find(o => o.value === deliveryFilter)?.label}
+                </span>
+              )}
             </h3>
             {result.methods.map((method, i) => {
               const isBest = i === 0;
@@ -345,11 +398,60 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
             })}
           </div>
 
-          {/* Mid-market rate note */}
-          <p className="text-xs text-center text-muted-foreground px-2">
-            Mid-market rate: 1 {result.sendCurrencyInfo.code} = {result.midMarketRate.toFixed(4)} {result.receiveCurrencyInfo.code}.
-            Actual rates may vary. Comparison based on publicly available fee structures.
-          </p>
+          {/* Mid-market rate note with source info */}
+          <div className="text-center px-2 space-y-1">
+            <p className="text-xs text-muted-foreground">
+              Mid-market rate: 1 {result.sendCurrencyInfo.code} = {result.midMarketRate.toFixed(4)} {result.receiveCurrencyInfo.code}.
+              Actual rates may vary. Comparison based on publicly available fee structures.
+            </p>
+            <p className="text-xs text-muted-foreground flex items-center justify-center gap-1.5">
+              {isLive ? (
+                <span className="inline-flex items-center gap-1">
+                  <Radio className="h-3 w-3 text-emerald-500" />
+                  <span className="font-medium text-emerald-600 dark:text-emerald-400">Live</span>
+                </span>
+              ) : (
+                <span className="font-medium">Estimated</span>
+              )}
+              <span>·</span>
+              <span>Source: {result.rateSource}</span>
+              {result.rateFetchedAt && (
+                <>
+                  <span>·</span>
+                  <span>Updated: {formatTime(result.rateFetchedAt)}</span>
+                </>
+              )}
+            </p>
+          </div>
+
+          {/* Rate chart */}
+          <RateChart
+            sendCurrency={sendCurrency}
+            receiveCurrency={receiveCurrency}
+            currentRate={result.midMarketRate}
+          />
+
+          {/* Set Rate Alert button */}
+          <div className="flex justify-center">
+            <Button
+              variant="outline"
+              onClick={() => setAlertOpen(true)}
+              className="text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 cursor-pointer"
+            >
+              <BarChart3 className="mr-2 h-4 w-4" />
+              Set Rate Alert
+            </Button>
+          </div>
+
+          <RateAlertDialog
+            open={alertOpen}
+            onOpenChange={setAlertOpen}
+            sendCurrency={sendCurrency}
+            receiveCurrency={receiveCurrency}
+            currentRate={result.midMarketRate}
+            sendSymbol={sendCur?.symbol || ""}
+            receiveSymbol={recvCur?.symbol || ""}
+          />
         </div>
       )}
     </section>

@@ -1,0 +1,438 @@
+   783→        'transparency showing total cost and recipient amount, and rate alert email notifications. Where Monito still leads '
+   784→        'is in the breadth of providers compared (50+ vs TradeFlow 5), the depth of corridor coverage (global vs Africa-
+   785→        'focused), and the affiliate monetization infrastructure. Monito also offers a "rate alert" product that is more '
+   786→        'sophisticated than TradeFlow current implementation, allowing users to track multiple corridors simultaneously and '
+   787→        'receiving weekly digest emails with rate summaries. For Phase 3, TradeFlow should study Monito affiliate integration '
+   788→        'architecture, particularly how they track referral conversions and maintain provider relationships.',
+   789→        body_style
+   790→    ),
+   791→    heading('<b>6.2 XE.com</b>', h2_style, 1),
+   792→    Paragraph(
+   793→        'XE.com is one of the oldest and most recognized FX tools globally, founded in 1993 and acquired by Euronet '
+   794→        'Worldwide in 2015. XE operates two complementary services: a free FX rate information service (used by over 300 '
+   795→        'million people annually) and a paid international transfer service. The free rate service provides live mid-market '
+   796→        'rates for every global currency pair, historical rate charts spanning 10+ years, currency conversion calculators, '
+   797→        'and rate email alerts. The paid transfer service offers competitive exchange rates with transparent fee structures. '
+   798→        'XE mobile app is consistently ranked among the top finance apps globally, with over 100 million downloads. The XE '
+   799→        'brand is so well-established that "check XE" has become a default action for anyone making an international payment, '
+   800→        'giving it a moat that new entrants struggle to overcome.',
+   801→        body_style
+   802→    ),
+   803→    Paragraph(
+   804→        'TradeFlow comparison: XE sets the benchmark for rate information depth. Its 10-year historical charts far exceed '
+   805→        'TradeFlow 30-day view, and its currency encyclopedia provides educational content that drives SEO traffic. TradeFlow '
+   806→        'should consider building educational content about PAPSS and African payment corridors as a SEO strategy, similar to '
+   807→        'how XE content about currency basics drives organic discovery. The XE rate alert system allows users to set alerts '
+   808→        'for any currency pair with custom thresholds, which TradeFlow now matches in basic form. Where XE is particularly '
+   809→        'strong is in brand recognition and habitual usage: millions of people check XE daily out of habit, creating a usage '
+   810→        'pattern that TradeFlow should aim to replicate for African corridor checks. The PAPSS comparison angle provides a '
+   811→        'natural habit-forming hook: "Check TradeFlow before every cross-border payment" should be the marketing goal.',
+   812→        body_style
+   813→    ),
+   814→    heading('<b>6.3 Revolut</b>', h2_style, 1),
+   815→    Paragraph(
+   816→        'Revolut is a UK-based neobank that has expanded from a travel card to a full financial super-app offering banking, '
+   817→        'trading, crypto, and international transfers to over 35 million customers globally. Revolut international transfer '
+   818→        'feature offers mid-market rate exchange on weekdays (with a markup of 0.3-1% depending on the plan tier) and '
+   819→        'instant transfers to other Revolut users globally. Revolut Business extends these capabilities with multi-currency '
+   820→        'accounts, batch payments, and API access. While Revolut is primarily a bank rather than a comparison tool, its '
+   821→        'transparent rate display and instant transfer capabilities set user expectations that comparison engines must address. '
+   822→        'Revolut mobile app is widely regarded as one of the best-designed finance apps globally, with a Net Promoter Score '
+   823→        'consistently above 60, and its UX patterns have influenced the design language of the entire fintech industry.',
+   824→        body_style
+   825→    ),
+   826→    Paragraph(
+   827→        'TradeFlow comparison: Revolut demonstrates that the "all-in-one financial platform" model has massive user appeal, '
+   828→        'but this is not TradeFlow path. TradeFlow should remain focused on comparison and transparency rather than trying to '
+   829→        'become a neobank. However, Revolut UX standards (clean, fast, mobile-first) should inform TradeFlow design decisions. '
+   830→        'Revolut rate transparency (showing the mid-market rate alongside its offered rate) is a pattern TradeFlow already '
+   831→        'follows, and the live rate indicator with timestamp directly mirrors what Revolut shows in its exchange screen. The '
+   832→        'key lesson from Revolut for TradeFlow is that user experience quality is a competitive moat: Revolut users stay because '
+   833→        'the app is pleasant to use, not because the rates are always the best. TradeFlow should invest in UX polish, '
+   834→        'particularly in the mobile PWA experience, to create the same kind of habitual usage.',
+   835→        body_style
+   836→    ),
+   837→])
+   838→
+   839→# UK scoring table
+   840→uk_headers = ['Feature', 'Monito', 'XE.com', 'Revolut', 'TradeFlow 1.5']
+   841→uk_rows = [
+   842→    ['Live FX Rates', '5/5', '5/5', '4/5', '4/5'],
+   843→    ['Rate Transparency', '5/5', '5/5', '4/5', '5/5'],
+   844→    ['Multi-Rail Compare', '5/5', '1/5', '1/5', '5/5'],
+   845→    ['Rate Charts', '4/5', '5/5', '3/5', '4/5'],
+   846→    ['Delivery Filters', '5/5', '1/5', '2/5', '5/5'],
+   847→    ['Rate Alerts', '5/5', '5/5', '3/5', '4/5'],
+   848→    ['Mobile Experience', '3/5', '5/5', '5/5', '3/5'],
+   849→    ['Historical Depth', '3/5', '5/5', '2/5', '2/5'],
+   850→    ['PAPSS Awareness', '0/5', '0/5', '0/5', '5/5'],
+   851→    ['Affiliate Model', '5/5', '1/5', '0/5', '0/5 (P3)'],
+   852→]
+   853→uk_ratios = [0.28, 0.16, 0.16, 0.16, 0.24]
+   854→uk_table_data = [[Paragraph('<b>%s</b>' % h, th_style) for h in uk_headers]]
+   855→for row in uk_rows:
+   856→    uk_table_data.append([
+   857→        Paragraph(row[0], td_left),
+   858→        Paragraph(row[1], td_style),
+   859→        Paragraph(row[2], td_style),
+   860→        Paragraph(row[3], td_style),
+   861→        Paragraph(ParagraphStyle(name='tf_uk_'+row[0].replace(' ','_'), fontName='FreeSerif-Bold', fontSize=9, leading=13, textColor=ACCENT if row[4]=='5/5' else TEXT_PRIMARY, alignment=TA_CENTER), row[4]),
+   862→    ])
+   863→uk_t = Table(uk_table_data, colWidths=[r*AVAIL_W for r in uk_ratios], hAlign='CENTER')
+   864→uk_cmds = list(na_cmds)
+   865→for i in range(1, len(uk_table_data)):
+   866→    bg = TABLE_ROW_ODD if i % 2 == 0 else TABLE_ROW_EVEN
+   867→    uk_cmds.append(('BACKGROUND', (0, i), (-1, i), bg))
+   868→uk_t.setStyle(TableStyle(uk_cmds))
+   869→story.append(Spacer(1, 12))
+   870→story.append(uk_t)
+   871→story.append(Spacer(1, 6))
+   872→story.append(Paragraph('<i>Table 6: United Kingdom feature comparison matrix</i>', muted_style))
+   873→story.append(Spacer(1, 18))
+   874→
+   875→# ══════════════════════════════════════════════════════════
+   876→# CHAPTER 7: Gap Analysis & Remaining Work
+   877→# ══════════════════════════════════════════════════════════
+   878→story.extend([
+   879→    heading('<b>7. Gap Analysis and Remaining Work</b>', h1_style, 0),
+   880→    Spacer(1, 8),
+   881→    heading('<b>7.1 Structural Gaps (Post-Improvement)</b>', h2_style, 1),
+   882→    Paragraph(
+   883→        'After implementing the six Phase 1.5 improvements, three structural gaps remain when TradeFlow is benchmarked '
+   884→        'against global best-in-class services. These gaps do not block Phase 2 development but should be addressed in '
+   885→        'subsequent phases to maintain competitive parity as the product scales.',
+   886→        body_style
+   887→    ),
+   888→    Paragraph(
+   889→        '<b>Native Mobile Application.</b> While the PWA support provides a solid mobile experience with home screen '
+   890→        'installation and offline capability, it does not match the performance and integration of native applications '
+   891→        'offered by Wise (60M+ downloads), Revolut (35M+ users), and SendWave (dominant in African remittance). Native apps '
+   892→        'provide access to device APIs (biometric authentication, NFC for tap-to-pay, camera for document scanning for KYC) '
+   893→        'that PWAs cannot fully replicate. For the African market, where mobile is the primary internet access method and '
+   894→        'low-end Android devices are common, a lightweight native app built with React Native or Flutter would provide '
+   895→        'materially better performance than a PWA on 2GB-RAM devices. This should be planned for Phase 3 or Phase 4, after '
+   896→        'the core web platform has proven product-market fit.',
+   897→        body_style
+   898→    ),
+   899→    Paragraph(
+   900→        '<b>Recurring Payment Comparison.</b> Wise and OFX both offer recurring transfer scheduling, allowing businesses '
+   901→        'to set up weekly or monthly international payments at locked-in rates. TradeFlow currently only supports one-time '
+   902→        'comparisons. For African businesses that make regular cross-border payments (importers paying suppliers, subscription '
+   903→        'services, payroll for remote teams), the ability to compare recurring payment costs across rails would be a '
+   904→        'significant value-add. This requires the invoicing and accounts infrastructure from Phase 2, making it a natural '
+   905→        'Phase 3 feature. The implementation would allow users to set a recurring amount and frequency, and see the total '
+   906→        'cost over 1, 3, 6, and 12 months across all payment methods.',
+   907→        body_style
+   908→    ),
+   909→    Paragraph(
+   910→        '<b>Affiliate and Partner Integration.</b> Monito entire business model is built on affiliate referrals: comparing '
+   911→        'providers and earning commissions when users complete transfers. TradeFlow currently has no mechanism to connect '
+   912→        'users to payment providers after comparison. This is by design for Phase 1 (comparison only), but Phase 3 should '
+   913→        'implement affiliate links for each payment method shown in the comparison results. The PAPSS rail presents a '
+   914→        'unique affiliate challenge: PAPSS is accessed through banks, not through a single platform, so TradeFlow cannot '
+   915→        'link directly to a "PAPSS transfer page". Instead, TradeFlow should partner with PAPSS-connected banks (Access Bank, '
+   916→        'Fidelity Bank, KCB, Standard Bank) and provide referral links to their business banking signup pages, earning '
+   917→        'referral fees for each business that opens an account and begins using PAPSS.',
+   918→        body_style
+   919→    ),
+   920→    heading('<b>7.2 New Gaps Identified from Global Benchmarks</b>', h2_style, 1),
+   921→    Paragraph(
+   922→        'The global benchmarking process revealed additional feature gaps that were not visible in the African-only audit '
+   923→        'because the African competitors are generally less feature-rich than their global counterparts. These new gaps '
+   924→        'should be evaluated for inclusion in the Phase 2-4 roadmap.',
+   925→        body_style
+   926→    ),
+   927→    Paragraph(
+   928→        '<b>Rate Lock Guarantee.</b> TransferGo offers 24-hour rate locks, and Wise shows rates that are guaranteed at the '
+   929→        'moment of transaction initiation. In volatile African currency markets (Naira lost 60%+ in 2023-2024), users need '
+   930→        'assurance that the rate they see is the rate they will get. TradeFlow should display a "rate valid for X minutes" '
+   931→        'indicator based on the cache TTL, setting accurate expectations about rate freshness. For Phase 2, this could be '
+   932→        'extended to a formal rate lock feature integrated with partner banks.',
+   933→        body_style
+   934→    ),
+   935→    Paragraph(
+   936→        '<b>Historical Rate Depth.</b> XE.com offers 10+ years of historical rate data, while TradeFlow currently shows '
+   937→        '30 days of simulated data. While 30 days is sufficient for immediate transfer timing decisions, business users '
+   938→        'planning long-term trade relationships need to understand seasonal rate patterns (e.g., how GHS-KES rates typically '
+   939→        'behave during harvest seasons or fiscal year ends). This requires accumulating real rate data over time, which the '
+   940→        'FxRateSnapshot model supports. Once live rates are flowing, TradeFlow should begin building historical depth and '
+   941→        'expand the chart range to 90 days, 1 year, and eventually 5 years as data accumulates.',
+   942→        body_style
+   943→    ),
+   944→    Paragraph(
+   945→        '<b>SEO and Educational Content.</b> XE.com and Wise both drive significant organic traffic through educational '
+   946→        'content about currencies, exchange rates, and international payments. XE currency encyclopedia provides background '
+   947→        'on every global currency. Wise blog covers topics like "how to send money to Nigeria" and "what is SWIFT." TradeFlow '
+   948→        'should create similar content targeting PAPSS and African payment corridor keywords: "How PAPSS works," "GHS to KES '
+   949→        'transfer cost comparison," "Best way to send money from Ghana to Kenya," and "AfCFTA payment guide." This content '
+   950→        'serves dual purposes: driving organic search traffic and establishing TradeFlow as the authoritative source on '
+   951→        'African cross-border payments, reinforcing the first-mover advantage in the PAPSS comparison niche.',
+   952→        body_style
+   953→    ),
+   954→    Paragraph(
+   955→        '<b>Multi-Currency Accounts.</b> Wise and Revolut offer multi-currency accounts that let users hold, convert, and '
+   956→        'manage multiple currencies from a single dashboard. This is particularly valuable for African businesses that '
+   957→        'operate across multiple AfCFTA markets. While building a full multi-currency account product is beyond TradeFlow '
+   958→        'scope (it would require banking licenses), TradeFlow could partner with existing multi-currency account providers '
+   959→        'and offer comparison of account features (fees, supported currencies, interest rates) alongside payment method '
+   960→        'comparison. This would expand TradeFlow value proposition from "compare one-time transfers" to "compare all cross-border '
+   961→        'financial products," significantly increasing user engagement and lifetime value.',
+   962→        body_style
+   963→    ),
+   964→])
+   965→
+   966→# ══════════════════════════════════════════════════════════
+   967→# CHAPTER 8: Cross-Regional Insights
+   968→# ══════════════════════════════════════════════════════════
+   969→story.extend([
+   970→    heading('<b>8. Cross-Regional Strategic Insights</b>', h1_style, 0),
+   971→    Spacer(1, 8),
+   972→    heading('<b>8.1 Infrastructure Parallels: PAPSS as Africa SEPA</b>', h2_style, 1),
+   973→    Paragraph(
+   974→        'The most significant insight from the global benchmarking is the parallel between PAPSS and SEPA. When SEPA '
+   975→        'launched in 2008, it faced the same challenges that PAPSS faces today: fragmented national payment systems, '
+   976→        'varying regulatory frameworks, low awareness among businesses, and resistance from incumbent providers who '
+   977→        'benefited from the opacity and high costs of cross-border payments. SEPA succeeded because the European Central '
+   978→        'Bank mandated adoption, set clear technical standards, and provided a migration timeline. PAPSS faces a harder '
+   979→        'path because African central banks are less coordinated than European ones, but AfCFTA provides the regulatory '
+   980→        'mandate equivalent to what the EU provided for SEPA.',
+   981→        body_style
+   982→    ),
+   983→    Paragraph(
+   984→        'The strategic implication for TradeFlow is clear: the comparison engine model works best in markets undergoing '
+   985→        'payment infrastructure transitions. In Europe, comparison tools like Monito thrived during the SEPA transition '
+   986→        'because users needed help understanding which providers offered SEPA-speed transfers versus legacy SWIFT. The same '
+   987→        'dynamic is now playing out in Africa with PAPSS: businesses need to understand which banks support PAPSS, which '
+   988→        'corridors are live, and how much they save compared to traditional methods. TradeFlow is positioned to be the '
+   989→        'Monito of the PAPSS transition, and the window of opportunity is time-limited: as PAPSS adoption becomes universal, '
+   990→        'the comparison value decreases and the tool must evolve toward deeper services (invoicing, trade facilitation).',
+   991→        body_style
+   992→    ),
+   993→    heading('<b>8.2 The Asian Partnership Model</b>', h2_style, 1),
+   994→    Paragraph(
+   995→        'Asia-Pacific provides the most relevant model for how payment infrastructure partnerships work in practice. '
+   996→        'Singapore MAS has built bilateral payment linkages with India (UPI-SingPay), Thailand (QR payment linkage), '
+   997→        'and Indonesia (QRIS linkage), each connecting national instant payment systems without routing through USD or '
+   998→        'SWIFT. Wise has integrated with these linkages, offering instant SGD-INR and SGD-THB transfers by leveraging the '
+   999→        'existing infrastructure rather than building its own rails. This is exactly the model that TradeFlow should follow '
+  1000→        'with PAPSS: rather than becoming a payment processor, TradeFlow should partner with PAPSS-connected banks and '
+  1001→        'payment providers, using its comparison engine to drive users toward providers who offer PAPSS settlement.',
+  1002→        body_style
+  1003→    ),
+  1004→    Paragraph(
+  1005→        'The InstaReM case study is equally instructive. InstaReM built its business by partnering with existing payment '
+  1006→        'infrastructure across Southeast Asia rather than creating proprietary networks. It integrated with Ripple for '
+  1007→        'blockchain-based settlement where traditional rails were slow, and with local banking networks where they were '
+  1008→        'fast. This flexible, partnership-heavy approach allowed InstaReM to scale to 80+ countries without the regulatory '
+  1009→        'burden of becoming a licensed money transmitter in every market. TradeFlow should adopt the same philosophy: build '
+  1010→        'the comparison and discovery layer, partner for execution, and let each partner handle their own regulatory '
+  1011→        'compliance. This minimizes TradeFlow regulatory exposure while maximizing its corridor coverage.',
+  1012→        body_style
+  1013→    ),
+  1014→    heading('<b>8.3 North American Transparency Standards</b>', h2_style, 1),
+  1015→    Paragraph(
+  1016→        'The North American market, particularly the United States, has set the global standard for fee transparency in '
+  1017→        'financial services. Wise built its brand on transparency in the US market, where consumers were accustomed to hidden '
+  1018→        'fees and opaque pricing from banks and traditional MTOs. The US Consumer Financial Protection Bureau (CFPB) has '
+  1019→        'increasingly scrutinized remittance pricing, requiring providers to disclose total costs including exchange rate '
+  1020→        'markups. This regulatory pressure has created a market environment where transparency-focused tools naturally thrive. '
+  1021→        'TradeFlow benefits from the same dynamic: as African regulators (CBN in Nigeria, BoG in Ghana) begin mandating '
+  1022→        'payment pricing transparency, TradeFlow comparison engine becomes not just useful but potentially required by '
+  1023→        'regulation for businesses comparing cross-border payment options.',
+  1024→        body_style
+  1025→    ),
+  1026→    Paragraph(
+  1027→        'The CurrencyFair model from North America also demonstrates that peer-to-peer FX marketplaces can work in '
+  1028→        'emerging markets. While CurrencyFair focuses on developed-market corridors (EUR-GBP, AUD-USD), the concept of '
+  1029→        'matching buyers and sellers of currency directly could be applied to African corridors where businesses regularly '
+  1030→        'need to convert between GHS, KES, NGN, and ZAR. A future TradeFlow feature could allow businesses to post currency '
+  1031→        'exchange requests and match with counter-parties, using PAPSS for settlement. This would create a marketplace layer '
+  1032→        'on top of the comparison engine, directly supporting the Phase 4 trade marketplace vision.',
+  1033→        body_style
+  1034→    ),
+  1035→])
+  1036→
+  1037→# ══════════════════════════════════════════════════════════
+  1038→# CHAPTER 9: Updated Recommendations
+  1039→# ══════════════════════════════════════════════════════════
+  1040→story.extend([
+  1041→    heading('<b>9. Updated Phase 2-4 Recommendations</b>', h1_style, 0),
+  1042→    Spacer(1, 8),
+  1043→    heading('<b>9.1 Phase 2 Additions (Invoicing and Receivables)</b>', h2_style, 1),
+  1044→    Paragraph(
+  1045→        'The global benchmarking has added two items to the Phase 2 roadmap beyond what the African audit recommended. '
+  1046→        'First, rate lock indicators should be added to the comparison results, showing users how long the displayed rate '
+  1047→        'is valid for (currently 60 seconds based on the cache TTL). This builds trust and sets accurate expectations, '
+  1048→        'following the TransferGo model. Second, SEO content should be created for key PAPSS and African corridor keywords, '
+  1049→        'following the XE.com and Wise content marketing playbook. Each comparison page should generate SEO-friendly metadata '
+  1050→        '(title, description, Open Graph tags) targeting queries like "GHS to KES transfer cost" and "PAPSS payment Nigeria." '
+  1051→        'These two additions are low-effort, high-impact and should be implemented alongside the core invoicing feature.',
+  1052→        body_style
+  1053→    ),
+  1054→    heading('<b>9.2 Phase 3 Additions (Payment Facilitation API)</b>', h2_style, 1),
+  1055→    Paragraph(
+  1056→        'Phase 3 should now include four major workstreams. First, affiliate and partner integration following the Monito '
+  1057→        'model: add referral links to each payment method in the comparison results, track conversions, and earn referral '
+  1058→        'commissions. Partner with PAPSS-connected banks (Access Bank, Fidelity Bank, KCB, Standard Bank of South Africa) '
+  1059→        'for referral arrangements. Second, implement recurring payment comparison, allowing businesses to see total costs '
+  1060→        'over time across payment methods. Third, build the rate alert cron system that monitors live rates and sends '
+  1061→        'email notifications when user-defined thresholds are hit, using Resend or SendGrid for email delivery. Fourth, '
+  1062→        'begin accumulating real historical rate data to expand the chart range from 30 days to 90 days and beyond.',
+  1063→        body_style
+  1064→    ),
+  1065→    heading('<b>9.3 Phase 4 Additions (Trade Marketplace)</b>', h2_style, 1),
+  1066→    Paragraph(
+  1067→        'The global benchmarking has expanded the Phase 4 vision. Beyond the original trade marketplace concept, Phase 4 '
+  1068→        'should include a native mobile application (React Native or Flutter) targeting the African Android market, a multi-
+  1069→        'currency account comparison feature (partnering with existing providers rather than building one), and potentially a '
+  1070→        'peer-to-peer currency matching feature for high-frequency African corridors. The Phase 4 marketplace should be '
+  1071→        'informed by the InstaReM partnership model: connect buyers and sellers through existing infrastructure rather than '
+  1072→        'building proprietary payment rails. The comparison data accumulated in Phases 1-3 will reveal which corridors have '
+  1073→        'the highest demand, informing marketplace feature prioritization and partner selection.',
+  1074→        body_style
+  1075→    ),
+  1076→    heading('<b>9.4 Production Database Migration (Cross-Phase)</b>', h2_style, 1),
+  1077→    Paragraph(
+  1078→        'The only remaining critical gap from the original African audit is the production database migration. SQLite with a '
+  1079→        'local file is not viable for a multi-user production system. The recommended path is migration to Turso (libSQL), '
+  1080→        'which offers a SQLite-compatible API with serverless scaling, global replication, and a generous free tier (500 '
+  1081→        'databases, 9GB storage). Turso is particularly well-suited for TradeFlow because it requires minimal Prisma schema '
+  1082→        'changes (the Prisma provider changes from "sqlite" to "libsql" with connection string updates), preserving all '
+  1083→        'existing models and queries. The migration should be completed before Phase 2 user authentication goes live in '
+  1084→        'production, as concurrent user sessions will cause SQLite locking issues on Vercel serverless functions.',
+  1085→        body_style
+  1086→    ),
+  1087→])
+  1088→
+  1089→# Updated roadmap table
+  1090→road_headers = ['Phase', 'Feature', 'Priority', 'Inspired By', 'Effort']
+  1091→road_rows = [
+  1092→    ['Phase 2', 'Invoicing with PAPSS savings', 'Critical', 'Wave, Zoho', 'High'],
+  1093→    ['Phase 2', 'Rate lock indicator (60s TTL)', 'High', 'TransferGo', 'Low'],
+  1094→    ['Phase 2', 'SEO content for PAPSS keywords', 'High', 'XE.com, Wise', 'Medium'],
+  1095→    ['Phase 2', 'Production DB (Turso)', 'Critical', 'All competitors', 'Medium'],
+  1096→    ['Phase 3', 'Affiliate partner integration', 'Critical', 'Monito', 'High'],
+  1097→    ['Phase 3', 'Recurring payment comparison', 'High', 'Wise, OFX', 'Medium'],
+  1098→    ['Phase 3', 'Rate alert cron + email', 'High', 'XE.com, TransferGo', 'Medium'],
+  1099→    ['Phase 3', 'Historical rate depth (90d+)', 'Medium', 'XE.com', 'Low'],
+  1100→    ['Phase 4', 'Native mobile app', 'High', 'SendWave, Revolut', 'Very High'],
+  1101→    ['Phase 4', 'Multi-currency account compare', 'Medium', 'Wise, Revolut', 'High'],
+  1102→    ['Phase 4', 'Trade marketplace', 'Medium', 'Alibaba, InstaReM', 'Very High'],
+  1103→    ['Phase 4', 'P2P currency matching', 'Low', 'CurrencyFair', 'High'],
+  1104→]
+  1105→road_table_data = [[Paragraph('<b>%s</b>' % h, th_style) for h in road_headers]]
+  1106→for row in road_rows:
+  1107→    priority_color = SEM_ERROR if row[2] == 'Critical' else (SEM_WARNING if row[2] == 'High' else TEXT_PRIMARY)
+  1108→    road_table_data.append([
+  1109→        Paragraph(row[0], td_style),
+  1110→        Paragraph(row[1], td_left),
+  1111→        Paragraph(row[2], ParagraphStyle(name='prio_'+row[1].replace(' ','_'), fontName='FreeSerif-Bold', fontSize=9, leading=13, textColor=priority_color, alignment=TA_CENTER)),
+  1112→        Paragraph(row[3], td_left),
+  1113→        Paragraph(row[4], td_style),
+  1114→    ])
+  1115→road_t = Table(road_table_data, colWidths=[AVAIL_W*0.12, AVAIL_W*0.33, AVAIL_W*0.12, AVAIL_W*0.25, AVAIL_W*0.18], hAlign='CENTER')
+  1116→road_cmds = [
+  1117→    ('BACKGROUND', (0, 0), (-1, 0), HEADER_FILL),
+  1118→    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+  1119→    ('GRID', (0, 0), (-1, -1), 0.4, BORDER),
+  1120→    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+  1121→    ('LEFTPADDING', (0, 0), (-1, -1), 5),
+  1122→    ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+  1123→    ('TOPPADDING', (0, 0), (-1, -1), 4),
+  1124→    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+  1125→]
+  1126→for i in range(1, len(road_table_data)):
+  1127→    bg = TABLE_ROW_ODD if i % 2 == 0 else TABLE_ROW_EVEN
+  1128→    road_cmds.append(('BACKGROUND', (0, i), (-1, i), bg))
+  1129→road_t.setStyle(TableStyle(road_cmds))
+  1130→story.append(Spacer(1, 12))
+  1131→story.append(road_t)
+  1132→story.append(Spacer(1, 6))
+  1133→story.append(Paragraph('<i>Table 7: Updated Phase 2-4 roadmap with global benchmark inspirations</i>', muted_style))
+  1134→story.append(Spacer(1, 18))
+  1135→
+  1136→# ══════════════════════════════════════════════════════════
+  1137→# CHAPTER 10: Competitive Positioning Summary
+  1138→# ══════════════════════════════════════════════════════════
+  1139→story.extend([
+  1140→    heading('<b>10. Competitive Positioning Summary</b>', h1_style, 0),
+  1141→    Spacer(1, 8),
+  1142→    Paragraph(
+  1143→        'After benchmarking against 16 global competitors across four regions, TradeFlow Phase 1.5 occupies a unique and '
+  1144→        'defensible competitive position. No global competitor offers multi-rail payment comparison that includes PAPSS '
+  1145→        'or any African-specific instant settlement infrastructure. This uniqueness is TradeFlow primary competitive '
+  1146→        'advantage and should be protected through continuous investment in PAPSS corridor data, bank partnership '
+  1147→        'development, and educational content that establishes TradeFlow as the authoritative source on African cross-border '
+  1148→        'payment costs.',
+  1149→        body_style
+  1150→    ),
+  1151→    Paragraph(
+  1152→        'The global benchmarking reveals that TradeFlow has achieved feature parity with most competitors on the core '
+  1153→        'comparison functionality (live rates, charts, delivery filters, rate alerts). The remaining gaps (native mobile app, '
+  1154→        'recurring comparisons, affiliate integration) are feature additions rather than fundamental architectural changes. '
+  1155→        'The production database migration is the only remaining critical infrastructure gap. With the Phase 1.5 improvements, '
+  1156→        'TradeFlow is ready to proceed to Phase 2 with a product that meets global standards for transparency, speed, and '
+  1157→        'user experience.',
+  1158→        body_style
+  1159→    ),
+  1160→    Paragraph(
+  1161→        'The most important strategic insight from this global audit is that TradeFlow timing is optimal. PAPSS is in its '
+  1162→        'early adoption phase, AfCFTA is driving regulatory harmonization, and no global competitor has recognized the PAPSS '
+  1163→        'comparison opportunity. The European experience with SEPA shows that comparison tools thrive during payment '
+  1164→        'infrastructure transitions, and Africa is now entering that transition period. By establishing the comparison engine '
+  1165→        'now, accumulating corridor data, and building bank partnerships, TradeFlow can create a defensible position before '
+  1166→        'well-funded competitors enter the space. The window of maximum opportunity is approximately 18-24 months, after which '
+  1167→        'PAPSS adoption will be widespread enough that the comparison value decreases and the product must evolve toward deeper '
+  1168→        'services. The updated roadmap in Chapter 9 ensures that TradeFlow builds toward that evolution systematically.',
+  1169→        body_style
+  1170→    ),
+  1171→])
+  1172→
+  1173→# Final competitive position table
+  1174→pos_headers = ['Dimension', 'TradeFlow 1.5', 'Best Global Benchmark', 'Gap Assessment']
+  1175→pos_rows = [
+  1176→    ['Core Comparison', 'Multi-rail (5 methods)', 'Monito (50+ providers)', 'Narrower but unique (PAPSS)'],
+  1177→    ['Rate Accuracy', 'Live + 60s cache + fallback', 'Wise (60s, mid-market)', 'At parity'],
+  1178→    ['Rate History', '30-day charts', 'XE.com (10+ years)', 'Gap - data accumulates over time'],
+  1179→    ['Delivery Options', '4 filter categories', 'Monito (5+ categories)', 'At parity'],
+  1180→    ['Rate Alerts', 'Email + threshold', 'XE.com + Monito', 'At parity (cron pending)'],
+  1181→    ['Mobile Experience', 'PWA with offline', 'Wise + Revolut (native)', 'Gap - PWA good, native better'],
+  1182→    ['Corridor Coverage', '20+ African currencies', 'Wise (80+ global)', 'Deeper in Africa, narrower globally'],
+  1183→    ['PAPSS Integration', 'Only platform', 'None (0/16 competitors)', 'Uncontested leadership'],
+  1184→    ['Business Model', 'Free comparison', 'Monito (affiliate)', 'Phase 3 roadmap'],
+  1185→    ['Regulatory Readiness', 'Compliance-by-design', 'Wise (licensed globally)', 'Phase 2+ incremental build'],
+  1186→]
+  1187→pos_table_data = [[Paragraph('<b>%s</b>' % h, th_style) for h in pos_headers]]
+  1188→for row in pos_rows:
+  1189→    gap_color = SEM_SUCCESS if 'At parity' in row[3] or 'Uncontested' in row[3] else (SEM_WARNING if 'Gap' in row[3] else SEM_INFO)
+  1190→    pos_table_data.append([
+  1191→        Paragraph(row[0], td_bold),
+  1192→        Paragraph(row[1], td_left),
+  1193→        Paragraph(row[2], td_left),
+  1194→        Paragraph(row[3], ParagraphStyle(name='gap_'+row[0].replace(' ','_'), fontName='FreeSerif', fontSize=9, leading=13, textColor=gap_color, alignment=TA_LEFT)),
+  1195→    ])
+  1196→pos_t = Table(pos_table_data, colWidths=[AVAIL_W*0.18, AVAIL_W*0.25, AVAIL_W*0.27, AVAIL_W*0.30], hAlign='CENTER')
+  1197→pos_cmds = [
+  1198→    ('BACKGROUND', (0, 0), (-1, 0), HEADER_FILL),
+  1199→    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+  1200→    ('GRID', (0, 0), (-1, -1), 0.4, BORDER),
+  1201→    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+  1202→    ('LEFTPADDING', (0, 0), (-1, -1), 5),
+  1203→    ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+  1204→    ('TOPPADDING', (0, 0), (-1, -1), 4),
+  1205→    ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+  1206→]
+  1207→for i in range(1, len(pos_table_data)):
+  1208→    bg = TABLE_ROW_ODD if i % 2 == 0 else TABLE_ROW_EVEN
+  1209→    pos_cmds.append(('BACKGROUND', (0, i), (-1, i), bg))
+  1210→pos_t.setStyle(TableStyle(pos_cmds))
+  1211→story.append(Spacer(1, 12))
+  1212→story.append(pos_t)
+  1213→story.append(Spacer(1, 6))
+  1214→story.append(Paragraph('<i>Table 8: Final competitive positioning assessment across all dimensions</i>', muted_style))
+  1215→
+  1216→# Build
+  1217→doc.pageTemplates = [template]
+  1218→doc.multiBuild(story)
+  1219→print(f'Body PDF generated: {OUTPUT}')
+  1220→

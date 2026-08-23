@@ -100,3 +100,17 @@ model ComparisonLog {
   userAgent      String?
   createdAt      DateTime @default(now())
 }
+
+// ─── Rate Alerts ──────────────────────────────────────────────
+
+model RateAlert {
+  id            String   @id @default(cuid())
+  userId        String?  // optional, for authenticated users
+  email         String   // email for notification
+  baseCurrency  String   // e.g., "GHS"
+  quoteCurrency String   // e.g., "KES"
+  targetRate    Float    // rate to trigger on
+  direction     String   // "above" | "below"
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
