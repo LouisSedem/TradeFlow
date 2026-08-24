@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=794, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c-bg: #f7f7f6;
+  --c-accent: #a18634;
+  --c-text: #171615;
+  --c-muted: #8c8a83;
+  --c-mid: #7b6e47;
+  --c-surface: #eae9e5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { margin: 0; padding: 0; overflow: hidden; }
+.cover-page {
+  position: relative;
+  width: 794px;
+  height: 1123px;
+  background: var(--c-bg);
+  border: none;
+  outline: none;
+}
+
+/* Layer 1: Background grid */
+.cover-layer-1 {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 1;
+}
+.grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--c-accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-accent) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.04;
+}
+
+/* Layer 2: Structure */
+.cover-layer-2 {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.anchor-line {
+  position: absolute;
+  left: 95px;
+  top: 112px;
+  width: 6px;
+  height: 898px;
+  background: var(--c-accent);
+}
+
+/* Layer 3: Content */
+.cover-layer-3 {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+.kicker {
+  position: absolute;
+  top: 168px;
+  left: 141px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16pt;
+  font-weight: 400;
+  letter-spacing: 3pt;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  opacity: 0.6;
+}
+.hero-title {
+  position: absolute;
+  top: 314px;
+  left: 141px;
+  max-width: 60%;
+  font-family: 'DM Serif Display', serif;
+  font-size: 52pt;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--c-text);
+}
+.summary-block {
+  position: absolute;
+  top: 561px;
+  left: 141px;
+  max-width: 55%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16pt;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--c-text);
+  opacity: 0.85;
+}
+.meta-block {
+  position: absolute;
+  top: 842px;
+  left: 141px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16pt;
+  font-weight: 400;
+  color: var(--c-muted);
+  line-height: 1.5;
+}
+.meta-block span {
+  display: block;
+}
+.footer-block {
+  position: absolute;
+  bottom: 90px;
+  right: 64px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14pt;
+  font-weight: 400;
+  letter-spacing: 2pt;
+  text-transform: uppercase;
+  color: var(--c-muted);
+  opacity: 0.5;
+}
+</style>
+</head>
+<body>
+<div class="cover-page">
+  <div class="cover-layer-1">
+    <div class="grid-pattern"></div>
+  </div>
+  <div class="cover-layer-2">
+    <div class="anchor-line"></div>
+  </div>
+  <div class="cover-layer-3">
+    <div class="kicker">Global Competitive Benchmark Audit</div>
+    <div class="hero-title">TradeFlow<br>Phase 1</div>
+    <div class="summary-block">
+      Comprehensive analysis benchmarking TradeFlow's PAPSS-powered
+      FX comparison platform against leading cross-border payment
+      and trade finance solutions across North America, Asia,
+      Europe, and the United Kingdom.
+    </div>
+    <div class="meta-block">
+      <span>Prepared for TradeFlow Product Team</span>
+      <span>August 2026</span>
+    </div>
+    <div class="footer-block">Confidential</div>
+  </div>
+</div>
+</body>
+</html>
