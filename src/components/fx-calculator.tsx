@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import {
   Select,
   SelectContent,
@@ -105,6 +105,9 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
   const [error, setError] = useState<string | null>(null);
   const [deliveryFilter, setDeliveryFilter] = useState<DeliveryFilter>("all");
   const [alertOpen, setAlertOpen] = useState(false);
+  const [rateLockExpiry, setRateLockExpiry] = useState<Date | null>(null);
+  const [rateStale, setRateStale] = useState(false);
+  const rateLockTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSwap = useCallback(() => {
     setSendCurrency(receiveCurrency);
@@ -143,6 +146,12 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
       }
       const data = await res.json();
       setResult(data);
+      // Start 60-second rate lock
+      const expiry = new Date(Date.now() + 60_000);
+      setRateLockExpiry(expiry);
+      setRateStale(false);
+      if (rateLockTimer.current) clearTimeout(rateLockTimer.current);
+      rateLockTimer.current = setTimeout(() => setRateStale(true), 60_000);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
     } finally {
@@ -154,6 +163,32 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
   const recvCur = useMemo(() => currencies.find((c) => c.code === receiveCurrency), [currencies, receiveCurrency]);
 
   const isLive = result?.rateSource?.includes("live") ?? false;
+
+  // Rate lock countdown
+  const [lockSeconds, setLockSeconds] = useState(60);
+  useEffect(() => {
+    if (!rateLockExpiry) { setLockSeconds(60); return; }
+    const interval = setInterval(() => {
+      const remaining = Math.max(0, Math.ceil((rateLockExpiry.getTime() - Date.now()) / 1000));
+      setLockSeconds(remaining);
+      if (remaining <= 0) clearInterval(interval);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [rateLockExpiry]);
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => { if (rateLockTimer.current) clearTimeout(rateLockTimer.current); };
+  }, []);
+
+  // Cost percentage: total cost as % of send amount
+  const getCostPercent = (method: MethodResult) => {
+    const sendAmt = parseFloat(amount) || 0;
+    if (sendAmt <= 0) return 0;
+    const totalCost = method.totalFee;
+    const costAsPercent = (totalCost / sendAmt) * 100;
+    return costAsPercent;
+  };
 
   const formatTime = (isoStr: string | null) => {
     if (!isoStr) return "N/A";
@@ -312,23 +347,45 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
       {result && (
         <div className="mt-6 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Savings banner */}
-          {result.savings && result.savings.bestMethod.methodType === "papss" && (
-            <Card className="border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/30">
+          {result.savings && (
+            <Card className={`border-2 ${result.savings.bestMethod.methodType === "papss" ? "border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/30" : "border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950/30"}`}>
               <CardContent className="p-4 flex items-center gap-3">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                  <TrendingDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${result.savings.bestMethod.methodType === "papss" ? "bg-emerald-100 dark:bg-emerald-900/50" : "bg-blue-100 dark:bg-blue-900/50"}`}>
+                  <TrendingDown className={`h-5 w-5 ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-emerald-800 dark:text-emerald-200">
+                  <p className={`font-semibold ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-800 dark:text-emerald-200" : "text-blue-800 dark:text-blue-200"}`}>
                     Save {recvCur?.symbol}{result.savings.savingsAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                   </p>
-                  <p className="text-sm text-emerald-600 dark:text-emerald-400">
-                    {result.savings.savingsPercent}% more received with PAPSS vs {result.savings.secondBest.method}
+                  <p className={`text-sm ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}`}>
+                    {result.savings.savingsPercent}% more received with {result.savings.bestMethod.method} vs {result.savings.secondBest.method}
                   </p>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <p className={`text-2xl font-bold ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}`}>
+                    -{result.savings.savingsPercent}%
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">total cost</p>
                 </div>
                 <CheckCircle2 className="h-6 w-6 text-emerald-500 flex-shrink-0" />
               </CardContent>
             </Card>
+          )}
+
+          {/* Rate lock indicator */}
+          {rateLockExpiry && (
+            <div className={`flex items-center justify-center gap-2 text-xs px-3 py-2 rounded-full border ${rateStale ? "border-amber-300 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300" : "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300"}`}>
+              {rateStale ? (
+                <AlertCircle className="h-3.5 w-3.5" />
+              ) : (
+                <CheckCircle2 className="h-3.5 w-3.5" />
+              )}
+              {rateStale ? (
+                <span>Rates may have changed — <button onClick={handleCompare} className="underline font-medium cursor-pointer">refresh now</button></span>
+              ) : (
+                <span>Rate locked for {lockSeconds}s</span>
+              )}
+            </div>
           )}
 
           {/* Method comparison cards */}
@@ -366,6 +423,9 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
                             <span className="font-semibold text-sm">{method.method}</span>
                             <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${BADGE_STYLES[method.colorClass] || ""}`}>
                               {method.totalFeePercent}% fee
+                            </span>
+                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                              {getCostPercent(method).toFixed(1)}% total cost
                             </span>
                             {isBest && (
                               <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">

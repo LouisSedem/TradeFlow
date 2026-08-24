@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  // Low-bandwidth optimization: compress all responses
+  compress: true,
+  // Power optimizations for mobile users in emerging markets
+  poweredByHeader: false,
 };
 
 export default nextConfig;
