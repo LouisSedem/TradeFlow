@@ -80,8 +80,8 @@ const METHOD_ICONS: Record<string, React.ReactNode> = {
 };
 
 const BADGE_STYLES: Record<string, string> = {
-  emerald: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800",
-  slate: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700",
+  emerald: "bg-primary/10 text-primary border-primary/20",
+  slate: "bg-muted text-muted-foreground border-border",
   amber: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 border-amber-200 dark:border-amber-800",
   yellow: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800",
   orange: "bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300 border-orange-200 dark:border-orange-800",
@@ -198,7 +198,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
 
   return (
     <section className="w-full max-w-2xl mx-auto" aria-label="FX Comparison Calculator">
-      <Card className="border-2 border-emerald-200 dark:border-emerald-900/50 shadow-lg shadow-emerald-500/5">
+      <Card className="border-2 border-primary/20 shadow-lg shadow-primary/5">
         <CardContent className="p-4 sm:p-6 space-y-5">
           {/* Send side */}
           <div className="space-y-2">
@@ -242,9 +242,10 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
                 <button
                   key={qa}
                   onClick={() => { setAmount(String(qa)); setResult(null); }}
-                  className={`px-3 py-1 text-xs font-medium rounded-full border transition-colors cursor-pointer ${
+                  aria-pressed={amount === String(qa)}
+                  className={`px-3 py-1 text-xs font-medium rounded-full border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                     amount === String(qa)
-                      ? "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-700"
+                      ? "bg-primary/10 text-primary border-primary/30"
                       : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
                   }`}
                 >
@@ -283,7 +284,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
                     <SelectItem key={c.code} value={c.code}>
                       <span className="mr-1.5">{c.flag}</span> {c.code} — {c.name}
                       {c.papssLive && (
-                        <span className="ml-1.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded-full">
+                        <span className="ml-1.5 text-xs font-medium text-primary bg-primary/10 px-1.5 py-0.5 rounded-full">
                           PAPSS
                         </span>
                       )}
@@ -301,9 +302,10 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
                 <button
                   key={opt.value}
                   onClick={() => { setDeliveryFilter(opt.value); setResult(null); }}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors cursor-pointer ${
+                  aria-pressed={deliveryFilter === opt.value}
+                  className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                     deliveryFilter === opt.value
-                      ? "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/40 dark:text-emerald-300 dark:border-emerald-700"
+                      ? "bg-primary/10 text-primary border-primary/30"
                       : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
                   }`}
                 >
@@ -318,7 +320,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
           <Button
             onClick={handleCompare}
             disabled={loading || !amount || parseFloat(amount) <= 0}
-            className="w-full h-12 text-base font-semibold bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
+            className="w-full h-12 text-base font-semibold cursor-pointer"
             size="lg"
           >
             {loading ? (
@@ -348,33 +350,33 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
         <div className="mt-6 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Savings banner */}
           {result.savings && (
-            <Card className={`border-2 ${result.savings.bestMethod.methodType === "papss" ? "border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-950/30" : "border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950/30"}`}>
+            <Card className={`border-2 ${result.savings.bestMethod.methodType === "papss" ? "border-primary/30 bg-primary/5" : "border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-950/30"}`}>
               <CardContent className="p-4 flex items-center gap-3">
-                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${result.savings.bestMethod.methodType === "papss" ? "bg-emerald-100 dark:bg-emerald-900/50" : "bg-blue-100 dark:bg-blue-900/50"}`}>
-                  <TrendingDown className={`h-5 w-5 ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}`} />
+                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${result.savings.bestMethod.methodType === "papss" ? "bg-primary/10" : "bg-blue-100 dark:bg-blue-900/50"}`}>
+                  <TrendingDown className={`h-5 w-5 ${result.savings.bestMethod.methodType === "papss" ? "text-primary" : "text-blue-600 dark:text-blue-400"}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className={`font-semibold ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-800 dark:text-emerald-200" : "text-blue-800 dark:text-blue-200"}`}>
+                  <p className={`font-semibold ${result.savings.bestMethod.methodType === "papss" ? "text-primary" : "text-blue-800 dark:text-blue-200"}`}>
                     Save {recvCur?.symbol}{result.savings.savingsAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                   </p>
-                  <p className={`text-sm ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}`}>
+                  <p className={`text-sm ${result.savings.bestMethod.methodType === "papss" ? "text-primary" : "text-blue-600 dark:text-blue-400"}`}>
                     {result.savings.savingsPercent}% more received with {result.savings.bestMethod.method} vs {result.savings.secondBest.method}
                   </p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <p className={`text-2xl font-bold ${result.savings.bestMethod.methodType === "papss" ? "text-emerald-600 dark:text-emerald-400" : "text-blue-600 dark:text-blue-400"}`}>
+                  <p className={`text-2xl font-bold ${result.savings.bestMethod.methodType === "papss" ? "text-primary" : "text-blue-600 dark:text-blue-400"}`}>
                     -{result.savings.savingsPercent}%
                   </p>
-                  <p className="text-[10px] text-muted-foreground">total cost</p>
+                  <p className="text-xs text-muted-foreground">total cost</p>
                 </div>
-                <CheckCircle2 className="h-6 w-6 text-emerald-500 flex-shrink-0" />
+                <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0" />
               </CardContent>
             </Card>
           )}
 
           {/* Rate lock indicator */}
           {rateLockExpiry && (
-            <div className={`flex items-center justify-center gap-2 text-xs px-3 py-2 rounded-full border ${rateStale ? "border-amber-300 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300" : "border-emerald-200 bg-emerald-50 dark:border-emerald-800 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300"}`}>
+            <div className={`flex items-center justify-center gap-2 text-xs px-3 py-2 rounded-full border ${rateStale ? "border-amber-300 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300" : "border-primary/20 bg-primary/5 text-primary"}`}>
               {rateStale ? (
                 <AlertCircle className="h-3.5 w-3.5" />
               ) : (
@@ -393,7 +395,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
             <h3 className="text-sm font-medium text-muted-foreground px-1">
               Comparison ({sendCur?.symbol}{parseFloat(amount).toLocaleString()})
               {deliveryFilter !== "all" && (
-                <span className="ml-2 text-emerald-600 dark:text-emerald-400">
+                <span className="ml-2 text-primary">
                   · {DELIVERY_OPTIONS.find(o => o.value === deliveryFilter)?.label}
                 </span>
               )}
@@ -406,7 +408,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
                   key={method.method}
                   className={`${
                     isBest
-                      ? "border-2 border-emerald-300 dark:border-emerald-700 shadow-md"
+                      ? "border-2 border-primary/30 shadow-md"
                       : "border border-border"
                   } transition-all`}
                 >
@@ -414,21 +416,21 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
                         <div className={`flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-white ${
-                          isPapss ? "bg-emerald-500" : "bg-muted-foreground/30"
+                          isPapss ? "bg-primary" : "bg-muted-foreground/30"
                         }`}>
                           {METHOD_ICONS[method.methodType] || <BarChart3 className="w-4 h-4" />}
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
                             <span className="font-semibold text-sm">{method.method}</span>
-                            <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${BADGE_STYLES[method.colorClass] || ""}`}>
+                            <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${BADGE_STYLES[method.colorClass] || ""}`}>
                               {method.totalFeePercent}% fee
                             </span>
-                            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                            <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">
                               {getCostPercent(method).toFixed(1)}% total cost
                             </span>
                             {isBest && (
-                              <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                              <span className="text-xs font-bold text-primary">
                                 BEST VALUE
                               </span>
                             )}
@@ -443,7 +445,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
                         </div>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <p className={`text-lg font-bold ${isPapss ? "text-emerald-600 dark:text-emerald-400" : ""}`}>
+                        <p className={`text-lg font-bold ${isPapss ? "text-primary" : ""}`}>
                           {result.receiveCurrencyInfo.symbol}
                           {method.recipientGets.toLocaleString(undefined, { maximumFractionDigits: 2 })}
                         </p>
@@ -467,8 +469,8 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
             <p className="text-xs text-muted-foreground flex items-center justify-center gap-1.5">
               {isLive ? (
                 <span className="inline-flex items-center gap-1">
-                  <Radio className="h-3 w-3 text-emerald-500" />
-                  <span className="font-medium text-emerald-600 dark:text-emerald-400">Live</span>
+                  <Radio className="h-3 w-3 text-primary" />
+                  <span className="font-medium text-primary">Live</span>
                 </span>
               ) : (
                 <span className="font-medium">Estimated</span>
@@ -496,7 +498,7 @@ export function FxCalculator({ currencies }: { currencies: CurrencyOption[] }) {
             <Button
               variant="outline"
               onClick={() => setAlertOpen(true)}
-              className="text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 cursor-pointer"
+              className="text-primary border-primary/20 hover:bg-primary/5 cursor-pointer"
             >
               <BarChart3 className="mr-2 h-4 w-4" />
               Set Rate Alert

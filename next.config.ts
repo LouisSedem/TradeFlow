@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
   // Low-bandwidth optimization: compress all responses
   compress: true,
   // Power optimizations for mobile users in emerging markets

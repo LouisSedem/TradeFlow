@@ -85,7 +85,6 @@ export function RateAlertDialog({
 
   const handleClose = () => {
     onOpenChange(false);
-    // Reset state after close
     setTimeout(() => {
       setSuccess(false);
       setError(null);
@@ -103,8 +102,8 @@ export function RateAlertDialog({
           <>
             <DialogHeader>
               <div className="flex items-center justify-center mb-2">
-                <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center">
-                  <CheckCircle2 className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                  <CheckCircle2 className="h-6 w-6 text-primary" />
                 </div>
               </div>
               <DialogTitle className="text-center">Alert Created!</DialogTitle>
@@ -114,7 +113,7 @@ export function RateAlertDialog({
               </DialogDescription>
             </DialogHeader>
             <DialogFooter className="sm:justify-center">
-              <Button onClick={handleClose} className="bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer">
+              <Button onClick={handleClose} className="cursor-pointer">
                 Done
               </Button>
             </DialogFooter>
@@ -123,7 +122,7 @@ export function RateAlertDialog({
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <Bell className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                <Bell className="h-5 w-5 text-primary" />
                 Set Rate Alert
               </DialogTitle>
               <DialogDescription>
@@ -136,7 +135,7 @@ export function RateAlertDialog({
               <div className="bg-muted/50 rounded-lg p-3 text-center">
                 <p className="text-xs text-muted-foreground">Current rate</p>
                 <p className="text-lg font-semibold">
-                  1 {sendCurrency} = <span className="text-emerald-600 dark:text-emerald-400">{currentRate.toFixed(decimals)}</span> {receiveCurrency}
+                  1 {sendCurrency} = <span className="text-primary">{currentRate.toFixed(decimals)}</span> {receiveCurrency}
                 </p>
               </div>
 
@@ -194,7 +193,7 @@ export function RateAlertDialog({
               <Button
                 onClick={handleSubmit}
                 disabled={loading || !email || !targetRate}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
+                className="cursor-pointer"
               >
                 {loading ? (
                   <>

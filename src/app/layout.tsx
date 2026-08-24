@@ -44,11 +44,13 @@ export default function RootLayout({
         <meta name="theme-color" content="#059669" />
       </head>
       <body className={`${geistSans.variable} font-sans antialiased bg-background text-foreground`}>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
-          disableTransitionOnChange
         >
           {children}
         </ThemeProvider>

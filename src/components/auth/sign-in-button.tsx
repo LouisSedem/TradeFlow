@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession, signIn, signOut } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Dialog,
   DialogContent,
@@ -74,7 +75,7 @@ export function SignInButton() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <LogIn className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+              <LogIn className="h-5 w-5 text-primary" />
               Sign In to TradeFlow
             </DialogTitle>
             <DialogDescription>
@@ -84,9 +85,7 @@ export function SignInButton() {
 
           <div className="space-y-4 py-2">
             <div className="space-y-1.5">
-              <label htmlFor="signin-email" className="text-sm font-medium">
-                Email
-              </label>
+              <Label htmlFor="signin-email">Email</Label>
               <Input
                 id="signin-email"
                 type="email"
@@ -105,7 +104,7 @@ export function SignInButton() {
             <Button
               onClick={handleSignIn}
               disabled={loading || !email}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer"
+              className="cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />

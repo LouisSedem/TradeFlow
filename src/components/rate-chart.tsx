@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import {
   LineChart,
   Line,
@@ -31,6 +31,23 @@ export function RateChart({ sendCurrency, receiveCurrency, currentRate }: RateCh
   const [apiData, setApiData] = useState<RateHistoryPoint[] | null>(null);
   const [source, setSource] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  // Read theme-aware color from CSS variable
+  const [primaryColor, setPrimaryColor] = useState("#059669");
+  useEffect(() => {
+    const el = chartRef.current;
+    if (!el) return;
+    const color = getComputedStyle(el).getPropertyValue("--primary").trim();
+    if (color) setPrimaryColor(color);
+    // Re-read when theme changes
+    const observer = new MutationObserver(() => {
+      const c = getComputedStyle(el).getPropertyValue("--primary").trim();
+      if (c) setPrimaryColor(c);
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -66,19 +83,19 @@ export function RateChart({ sendCurrency, receiveCurrency, currentRate }: RateCh
   const decimals = currentRate > 100 ? 0 : currentRate > 10 ? 2 : 4;
 
   const TrendIcon = stats.trend === "up" ? TrendingUp : stats.trend === "down" ? TrendingDown : Minus;
-  const trendColor = stats.trend === "up" ? "text-emerald-600 dark:text-emerald-400" : stats.trend === "down" ? "text-red-500 dark:text-red-400" : "text-muted-foreground";
+  const trendColor = stats.trend === "up" ? "text-primary" : stats.trend === "down" ? "text-red-500 dark:text-red-400" : "text-muted-foreground";
 
   return (
-    <Card className="border border-border">
+    <Card className="border border-border" ref={chartRef}>
       <CardContent className="p-4 sm:p-6 space-y-4">
         <div className="flex items-center gap-2">
-          <BarChart3 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+          <BarChart3 className="h-4 w-4 text-primary" />
           <h3 className="text-sm font-semibold">30-Day Rate Trend</h3>
           <span className="text-xs text-muted-foreground">
             1 {sendCurrency} = ? {receiveCurrency}
           </span>
           {isRealData && (
-            <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">
               Live Data
             </span>
           )}
@@ -94,8 +111,8 @@ export function RateChart({ sendCurrency, receiveCurrency, currentRate }: RateCh
               <AreaChart data={history} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                 <defs>
                   <linearGradient id="rateGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#059669" stopOpacity={0.2} />
-                    <stop offset="100%" stopColor="#059669" stopOpacity={0} />
+                    <stop offset="0%" stopColor={primaryColor} stopOpacity={0.2} />
+                    <stop offset="100%" stopColor={primaryColor} stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -129,11 +146,11 @@ export function RateChart({ sendCurrency, receiveCurrency, currentRate }: RateCh
                 <Area
                   type="monotone"
                   dataKey="rate"
-                  stroke="#059669"
+                  stroke={primaryColor}
                   strokeWidth={2}
                   fill="url(#rateGradient)"
                   dot={false}
-                  activeDot={{ r: 4, fill: "#059669", strokeWidth: 0 }}
+                  activeDot={{ r: 4, fill: primaryColor, strokeWidth: 0 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -143,22 +160,22 @@ export function RateChart({ sendCurrency, receiveCurrency, currentRate }: RateCh
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-3 text-center">
           <div>
-            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Min</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Min</p>
             <p className="text-sm font-semibold">{stats.min.toFixed(decimals)}</p>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">30d Trend</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">30d Trend</p>
             <div className={`flex items-center gap-1 ${trendColor}`}>
               <TrendIcon className="h-3.5 w-3.5" />
               <span className="text-sm font-semibold">{stats.trend === "up" ? "Up" : stats.trend === "down" ? "Down" : "Flat"}</span>
             </div>
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Max</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Max</p>
             <p className="text-sm font-semibold">{stats.max.toFixed(decimals)}</p>
           </div>
         </div>
-        <p className="text-[10px] text-center text-muted-foreground">
+        <p className="text-xs text-center text-muted-foreground">
           Range: {stats.range.toFixed(decimals)}
           {isRealData ? "" : " · Simulated for illustration"}
         </p>
